@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# f5419161-0138-4909-8252-ba9794a63e53
+# 4b50a6fb-a4a6-4b30-9879-0b671f941a72
 import argparse
 
 import numpy as np
@@ -50,6 +52,24 @@ def argmax_with_tolerance(x: np.ndarray, axis: int = -1) -> np.ndarray:
     x = np.asarray(x)
     return np.argmax(x + 1e-6 >= np.max(x, axis=axis, keepdims=True), axis=axis)
 
+def policy_eval(policy:list[int], value_func:list[float], iters:int, gam:float):
+    for i in range(iters):
+        for s in range(len(policy)):
+            actions = GridWorld.step(s, policy[s])
+            value_func[s] = sum([p*(r+gam*value_func[_s])  for p,r,_s in actions])
+    return value_func
+
+def policy_improvement(policy:list[int], value_func:list[float]):
+    updated = True
+    while updated:
+        updated = False
+        for s in range(len(policy)):
+            rewards = [sum([p*(r+value_func[_s]) for p,r,_s in GridWorld.step(s,a)]) for a in range(GridWorld.actions)]
+            best = argmax_with_tolerance(rewards)
+            if policy[s] != best:
+                policy[s] = best
+                updated = True
+    return policy
 
 def main(args: argparse.Namespace) -> tuple[list[float] | np.ndarray, list[int] | np.ndarray]:
     # Start with zero value function and "go North" policy
@@ -57,6 +77,9 @@ def main(args: argparse.Namespace) -> tuple[list[float] | np.ndarray, list[int] 
     policy = [0] * GridWorld.states
 
     # TODO: Implement policy iteration algorithm, with `args.steps` steps of
+    for i in range(args.steps):
+        value_function = policy_eval(policy,value_function,args.iterations, args.gamma)
+        policy = policy_improvement(policy, value_function)
     # policy evaluation/policy improvement. During policy evaluation, use the
     # current value function and perform `args.iterations` applications of the
     # Bellman equation. Perform the policy evaluation asynchronously (i.e., update

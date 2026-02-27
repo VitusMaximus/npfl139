@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# f5419161-0138-4909-8252-ba9794a63e53
+# 4b50a6fb-a4a6-4b30-9879-0b671f941a72
 import argparse
 
 import numpy as np
@@ -49,6 +51,30 @@ def argmax_with_tolerance(x: np.ndarray, axis: int = -1) -> np.ndarray:
     x = np.asarray(x)
     return np.argmax(x + 1e-6 >= np.max(x, axis=axis, keepdims=True), axis=axis)
 
+def policy_eval(policy:list[int], gam:float):
+    S = len(policy)
+    eq, b = np.zeros((S,S)), np.zeros((S))
+    for s in range(S):
+
+        eq[s,s] = 1
+        _r = 0
+        for p, r, _s in GridWorld.step(s, policy[s]):
+            eq[s,_s] -= gam*p
+            _r += p*r
+        b[s] += _r
+    return np.linalg.solve(eq,b) 
+
+def policy_improvement(policy:list[int], value_func:list[float]):
+    updated = True
+    while updated:
+        updated = False
+        for s in range(len(policy)):
+            rewards = [sum([p*(r+value_func[_s]) for p,r,_s in GridWorld.step(s,a)]) for a in range(GridWorld.actions)]
+            best = argmax_with_tolerance(rewards)
+            if policy[s] != best:
+                policy[s] = best
+                updated = True
+    return policy
 
 def main(args: argparse.Namespace) -> tuple[list[float] | np.ndarray, list[int] | np.ndarray]:
     # Start with zero value function and "go North" policy
@@ -61,7 +87,9 @@ def main(args: argparse.Namespace) -> tuple[list[float] | np.ndarray, list[int] 
     # Note that you need to use 64-bit floats because lower precision results
     # in unacceptable error. During the policy improvement, use the
     # `argmax_with_tolerance` to choose the best action.
-
+    for i in range(args.steps):
+        value_function = policy_eval(policy,args.gamma)
+        policy = policy_improvement(policy,value_function)
     # TODO: The final value function should be in `value_function` and final greedy policy in `policy`.
     return value_function, policy
 
