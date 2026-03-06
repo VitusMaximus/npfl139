@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# f5419161-0138-4909-8252-ba9794a63e53
+# 4b50a6fb-a4a6-4b30-9879-0b671f941a72
 import argparse
 
 import gymnasium as gym
@@ -26,6 +28,9 @@ def main(args: argparse.Namespace) -> np.ndarray:
     V = np.zeros(env.observation_space.n)
     C = np.zeros(env.observation_space.n)
 
+    pi = np.array([0, 0.5, 0.5, 0])
+    b = np.array([0.25, 0.25, 0.25, 0.25])
+
     for _ in range(args.episodes):
         state, done = env.reset()[0], False
 
@@ -39,6 +44,17 @@ def main(args: argparse.Namespace) -> np.ndarray:
             state = next_state
 
         # TODO: Update V using weighted importance sampling.
+
+        G = 0
+        W = 1
+
+        for t, (state, action, reward) in enumerate(reversed(episode)):
+            if action != 1 and action != 2:
+                break
+            G = G + reward
+            C[state] = C[state] + W
+            V[state] = V[state] + (W / C[state]) * (G - V[state])
+            W = W * pi[action] / b[action]
 
     return V
 

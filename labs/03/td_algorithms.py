@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
+# f5419161-0138-4909-8252-ba9794a63e53
+# 4b50a6fb-a4a6-4b30-9879-0b671f941a72
+import asyncio.format_helpers
 import argparse
 
 import gymnasium as gym
 import numpy as np
-
+from collections import deque
 import npfl139
 npfl139.require_version("2526.3")
 
@@ -51,9 +54,10 @@ def main(args: argparse.Namespace) -> np.ndarray:
         return target_policy
 
     # Run the TD algorithm
+    n = args.n
     for _ in range(args.episodes):
         next_state, done = env.reset()[0], False
-
+        queue = deque(maxlen=n)
         # Generate episode and update Q using the given TD method
         next_action, next_action_prob = choose_next_action(Q)
         while not done:
@@ -62,6 +66,61 @@ def main(args: argparse.Namespace) -> np.ndarray:
             done = terminated or truncated
             if not done:
                 next_action, next_action_prob = choose_next_action(Q)
+            
+            queue.append((state, action, action_prob, reward))
+
+            if len(queue) == n:
+                rho = 1.0
+                pi = compute_target_policy(Q)
+                if args.off_policy and args.mode != "tree_backup":
+                    for s, a, p, _ in list(queue)[1:]:
+                        rho *= pi[s, a] / p
+
+                match args.mode:
+                    case "sarsa":
+                        G = sum([args.gamma ** i * r for i, (_, _, _, r) in enumerate(queue)])
+                        if not done:
+                            if args.off_policy:
+                                rho *= pi[next_state, next_action] / next_action_prob
+                            G += args.gamma ** n * Q[next_state, next_action]
+                        S, A, _, _ = queue.popleft()
+                    
+                    case "expected_sarsa":
+                        G = sum([args.gamma ** i * r for i, (_, _, _, r) in enumerate(queue)])
+                        if not done:
+                            G += args.gamma ** n * np.dot(pi[next_state], Q[next_state])
+                        S, A, _, _ = queue.popleft()
+                    
+                    case "tree_backup":
+                        q = list(queue)
+                        if done:
+                            G = q[-1][3]
+                        else:
+                            G = q[-1][3] + args.gamma * (Q[next_state] @ pi[next_state])
+                        for k in range(len(q) - 2, -1, -1):
+                            s_next, a_next = q[k + 1][0], q[k + 1][1]
+                            G = q[k][3] + args.gamma * ((Q[s_next] @ pi[s_next]) - pi[s_next, a_next] * Q[s_next, a_next] + pi[s_next, a_next] * G)
+                        S, A, _, _ = queue.popleft()
+
+                Q[S, A] += args.alpha * rho * (G - Q[S, A])
+
+        while queue:
+            pi = compute_target_policy(Q)
+            rho = 1.0
+            if args.mode == "tree_backup":
+                q = list(queue)
+                G = q[-1][3]
+                for k in range(len(q) - 2, -1, -1):
+                    s_next, a_next = q[k + 1][0], q[k + 1][1]
+                    G = q[k][3] + args.gamma * ((Q[s_next] @ pi[s_next]) - pi[s_next, a_next] * Q[s_next, a_next] + pi[s_next, a_next] * G)
+            else:
+                G = sum(args.gamma ** i * r for i, (_, _, _, r) in enumerate(queue))
+                if args.off_policy:
+                    for s, a, p, _ in list(queue)[1:]:
+                        rho *= pi[s, a] / p
+            S, A, _, _ = queue.popleft()
+            Q[S, A] += args.alpha * rho * (G - Q[S, A])
+
 
             # TODO: Perform the update to the state-action value function `Q`, using
             # a TD update with the following parameters:
