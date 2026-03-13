@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# f5419161-0138-4909-8252-ba9794a63e53
+# 4b50a6fb-a4a6-4b30-9879-0b671f941a72
+
 import argparse
 import collections
 
@@ -16,31 +19,35 @@ parser.add_argument("--render_each", default=0, type=int, help="Render some epis
 parser.add_argument("--seed", default=None, type=int, help="Random seed.")
 parser.add_argument("--threads", default=1, type=int, help="Maximum number of threads to use.")
 # For these and any other arguments you add, ReCodEx will keep your default value.
-parser.add_argument("--batch_size", default=..., type=int, help="Batch size.")
-parser.add_argument("--epsilon", default=..., type=float, help="Exploration factor.")
-parser.add_argument("--epsilon_final", default=None, type=float, help="Final exploration factor.")
-parser.add_argument("--epsilon_final_at", default=None, type=int, help="Training episodes.")
-parser.add_argument("--gamma", default=..., type=float, help="Discounting factor.")
-parser.add_argument("--hidden_layer_size", default=..., type=int, help="Size of hidden layer.")
-parser.add_argument("--learning_rate", default=..., type=float, help="Learning rate.")
-parser.add_argument("--target_update_freq", default=..., type=int, help="Target update frequency.")
+parser.add_argument("--batch_size", default=32, type=int, help="Batch size.")
+parser.add_argument("--epsilon", default=0.5, type=float, help="Exploration factor.")
+parser.add_argument("--epsilon_final", default=0.01, type=float, help="Final exploration factor.")
+parser.add_argument("--epsilon_final_at", default=500, type=int, help="Training episodes.")
+parser.add_argument("--gamma", default=0.99, type=float, help="Discounting factor.")
+parser.add_argument("--hidden_layer_size", default=200, type=int, help="Size of hidden layer.")
+parser.add_argument("--learning_rate", default=0.001, type=float, help="Learning rate.")
+parser.add_argument("--target_update_freq", default=100, type=int, help="Target update frequency.")
+parser.add_argument("--episodes", default=700, type=int, help="Training episodes.")
 
 
 class Network:
     # Use GPU if available.
-    device = torch.device(torch.accelerator.current_device() if torch.accelerator.is_available() else "cpu")
+    device = torch.device(torch.accelerator.current_device_index() if torch.accelerator.is_available() else "cpu")
 
     def __init__(self, env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
         # TODO: Create a suitable model and store it as `self._model`.
+        print(f"Using device: {self.device}")
         self._model = torch.nn.Sequential(
-            ...
+            torch.nn.Linear(env.observation_space.shape[0], args.hidden_layer_size),
+            torch.nn.ReLU(),
+            torch.nn.Linear(args.hidden_layer_size, env.action_space.n)
         ).to(self.device)
 
         # TODO: Define a suitable optimizer from `torch.optim`.
-        self._optimizer = ...
+        self._optimizer = torch.optim.Adam(self._model.parameters(), lr=args.learning_rate)
 
         # TODO: Define the loss (most likely some `torch.nn.*Loss`).
-        self._loss = ...
+        self._loss = torch.nn.MSELoss()
 
     # Define a training method. Generally you have two possibilities
     # - pass new q_values of all actions for a given state; all but one are the same as before
@@ -80,26 +87,35 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
     # Construct the network
     network = Network(env, args)
 
+    target_network = Network(env, args)
+    target_network.copy_weights_from(network)
+    since_update = 0
+
     # Replay memory; the `max_length` parameter is its maximum capacity.
     replay_buffer = npfl139.ReplayBuffer(max_length=1_000_000)
     Transition = collections.namedtuple("Transition", ["state", "action", "reward", "done", "next_state"])
 
     epsilon = args.epsilon
-    training = True
+    training = not args.recodex
+    episode = 0
     while training:
+        episode += 1
+        if episode % 10 == 0:
+            print(f"Epsilon: {epsilon:.6f}")
         # Perform episode
         state, done = env.reset()[0], False
         while not done:
             # TODO: Choose an action.
             # You can compute the q_values of a given state by
             #   q_values = network.predict(state[np.newaxis])[0]
-            action = ...
+            q_values = network.predict(state[np.newaxis])[0]
+            action = q_values.argmax() if np.random.rand() >= epsilon else env.action_space.sample()
 
             next_state, reward, terminated, truncated, _ = env.step(action)
             done = terminated or truncated
 
             # Append state, action, reward, done and next_state to replay_buffer
-            replay_buffer.append(Transition(state, action, reward, done, next_state))
+            replay_buffer.append(Transition(state, action, reward, terminated, next_state))
 
             # TODO: If the `replay_buffer` is large enough, perform training using
             # a batch of `args.batch_size` uniformly randomly chosen transitions.
@@ -114,17 +130,41 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
             # After you compute suitable targets, you can train the network by
             #   network.train(...)
 
+            if len(replay_buffer) >= args.batch_size:
+                
+                batch = replay_buffer.sample(args.batch_size)
+
+                current_q = network.predict(batch.state)
+                next_q = target_network.predict(batch.next_state)
+
+                target = current_q.copy()
+                target[np.arange(args.batch_size), batch.action] = batch.reward + (1 - batch.done) * args.gamma * np.max(next_q, axis=1)
+
+                network.train(batch.state, target)
+
+                since_update += 1
+                if since_update >= args.target_update_freq:
+                    target_network.copy_weights_from(network)
+                    since_update = 0
+
             state = next_state
 
         if args.epsilon_final_at:
             epsilon = np.interp(env.episode + 1, [0, args.epsilon_final_at], [args.epsilon, args.epsilon_final])
 
+        if episode >= args.episodes:
+            training = False
+
+    torch.save(network._model.state_dict(), "cartpole_model.pt")
+            
+    if args.recodex:
+        network._model.load_state_dict(torch.load("cartpole_model.pt", map_location=network.device))
     # Final evaluation
     while True:
         state, done = env.reset(start_evaluation=True)[0], False
         while not done:
             # TODO: Choose a greedy action
-            action = ...
+            action = network.predict(state[np.newaxis])[0].argmax()
             state, reward, terminated, truncated, _ = env.step(action)
             done = terminated or truncated
 
