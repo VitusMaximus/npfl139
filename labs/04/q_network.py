@@ -96,7 +96,7 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
     Transition = collections.namedtuple("Transition", ["state", "action", "reward", "done", "next_state"])
 
     epsilon = args.epsilon
-    training = not args.recodex
+    training = True
     episode = 0
     while training:
         episode += 1
@@ -154,11 +154,8 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
 
         if episode >= args.episodes:
             training = False
-
-    torch.save(network._model.state_dict(), "cartpole_model.pt")
             
-    if args.recodex:
-        network._model.load_state_dict(torch.load("cartpole_model.pt", map_location=network.device))
+
     # Final evaluation
     while True:
         state, done = env.reset(start_evaluation=True)[0], False
