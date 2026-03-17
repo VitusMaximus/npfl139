@@ -13,7 +13,7 @@ parser = argparse.ArgumentParser()
 # These arguments will be set appropriately by ReCodEx, even if you change them.
 parser.add_argument("--recodex", default=False, action="store_true", help="Running in ReCodEx")
 parser.add_argument("--render_each", default=0, type=int, help="Render some episodes.")
-parser.add_argument("--seed", default=None, type=int, help="Random seed.")
+parser.add_argument("--seed", default=42, type=int, help="Random seed.")
 parser.add_argument("--threads", default=1, type=int, help="Maximum number of threads to use.")
 # For these and any other arguments you add, ReCodEx will keep your default value.
 parser.add_argument("--continuous", default=0, type=int, help="Use continuous actions.")
@@ -23,19 +23,20 @@ parser.add_argument("--frame_stack", default=4, type=int, help="Frame stack.")
 parser.add_argument("--agent_path", default="car_racing_agent.pt", type=str, help="Path to the saved model.")
 
 parser.add_argument("--batch_size", default=64, type=int, help="Batch size.")
-parser.add_argument("--replay_buffer_size", default=100_000, type=int, help="Replay buffer size.")
-parser.add_argument("--replay_start_size", default=20_000, type=int, help="Minimum replay buffer size before training.")
+parser.add_argument("--replay_buffer_size", default=500_000, type=int, help="Replay buffer size.")
+parser.add_argument("--replay_start_size", default=100_000, type=int, help="Minimum replay buffer size before training.")
 parser.add_argument("--epsilon", default=1.0, type=float, help="Exploration factor.")
 parser.add_argument("--epsilon_final", default=0.01, type=float, help="Final exploration factor.")
-parser.add_argument("--epsilon_final_at", default=200_000, type=int, help="Training steps.")
+parser.add_argument("--epsilon_final_at", default=800_000, type=int, help="Training steps.")
 parser.add_argument("--gamma", default=0.99, type=float, help="Discounting factor.")
 parser.add_argument("--hidden_layer_size", default=256, type=int, help="Size of hidden layer.")
 parser.add_argument("--learning_rate", default=0.00025, type=float, help="Learning rate.")
-parser.add_argument("--target_update_freq", default=5_000, type=int, help="Target update frequency.")
+parser.add_argument("--target_update_freq", default=10_000, type=int, help="Target update frequency.")
 parser.add_argument("--steps", default=1_000_000, type=int, help="Training steps.")
 
 parser.add_argument("--num_envs", default=16, type=int, help="Number of parallel environments.")
-parser.add_argument("--downsample", default=2, type=int, help="Downsample factor for observations.")
+parser.add_argument("--downsample", default=1, type=int, help="Downsample factor for observations.")    # 1 better
+
 
 
 class Permute(torch.nn.Module):
@@ -58,6 +59,8 @@ class Network:
             torch.nn.Conv2d(env.observation_space.shape[2] * args.frame_stack, 32, kernel_size=3, stride=2),
             torch.nn.ReLU(),
             torch.nn.Conv2d(32, 64, kernel_size=3, stride=2),
+            torch.nn.ReLU(),
+            torch.nn.Conv2d(64, 64, kernel_size=3, stride=2),
             torch.nn.ReLU(),
             torch.nn.Conv2d(64, 64, kernel_size=3, stride=2),
             torch.nn.ReLU(),
@@ -275,6 +278,8 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
 
         if step >= args.steps:
             training = False
+
+    torch.save(network, args.agent_path)
 
         
 
