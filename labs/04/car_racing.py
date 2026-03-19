@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# f5419161-0138-4909-8252-ba9794a63e53
+# 4b50a6fb-a4a6-4b30-9879-0b671f941a72
+
 import argparse
 import collections
 
@@ -175,7 +178,7 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
     # Assuming you have pre-trained your agent locally, perform only evaluation in ReCodEx
     if args.recodex:
         # TODO: Load the agent
-        network: Network = torch.load(args.agent_path, weights_only=False)
+        network: Network = torch.load(args.agent_path, weights_only=False, map_location=Network.device)
 
         cr_env = CarRacingEnv(env, args)
 
