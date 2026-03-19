@@ -23,8 +23,8 @@ parser.add_argument("--frame_stack", default=4, type=int, help="Frame stack.")
 parser.add_argument("--agent_path", default="car_racing_agent.pt", type=str, help="Path to the saved model.")
 
 parser.add_argument("--batch_size", default=64, type=int, help="Batch size.")
-parser.add_argument("--replay_buffer_size", default=500_000, type=int, help="Replay buffer size.")
-parser.add_argument("--replay_start_size", default=100_000, type=int, help="Minimum replay buffer size before training.")
+parser.add_argument("--replay_buffer_size", default=300_000, type=int, help="Replay buffer size.")
+parser.add_argument("--replay_start_size", default=50_000, type=int, help="Minimum replay buffer size before training.")
 parser.add_argument("--epsilon", default=1.0, type=float, help="Exploration factor.")
 parser.add_argument("--epsilon_final", default=0.01, type=float, help="Final exploration factor.")
 parser.add_argument("--epsilon_final_at", default=800_000, type=int, help="Training steps.")
@@ -51,6 +51,7 @@ class Permute(torch.nn.Module):
 class Network:
     # Use GPU if available.
     device = torch.device(torch.accelerator.current_device_index() if torch.accelerator.is_available() else "cpu")
+    print(f"Počet dostupných GPU: {torch.cuda.device_count()}")
 
     def __init__(self, env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
 
@@ -174,7 +175,7 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
     # Assuming you have pre-trained your agent locally, perform only evaluation in ReCodEx
     if args.recodex:
         # TODO: Load the agent
-        network: Network = torch.load(args.agent_path)
+        network: Network = torch.load(args.agent_path, weights_only=False)
 
         cr_env = CarRacingEnv(env, args)
 
