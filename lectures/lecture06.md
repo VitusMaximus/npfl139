@@ -4,6 +4,10 @@
 #### Reading: https://ufal.mff.cuni.cz/~straka/courses/npfl139/2526/slides.pdf/npfl139-2526-06.pdf,PDF Slides
 #### Video: https://lectures.ms.mff.cuni.cz/video/rec/npfl139/2526/npfl139-2526-06.mp4, Lecture
 #### Questions: #lecture_6_questions
+#### Lecture assignment: reinforce
+#### Lecture assignment: reinforce_baseline
+#### Lecture assignment: cart_pole_pixels
+#### Lecture assignment: paac
 
 - Policy Gradient Methods [Sections 13-13.1 of RLB]
 - Policy Gradient Theorem [Section 13.2 of RLB]
