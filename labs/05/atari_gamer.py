@@ -17,7 +17,7 @@ parser.add_argument("--threads", default=1, type=int, help="Maximum number of th
 # For these and any other arguments you add, ReCodEx will keep your default value.
 parser.add_argument("--frame_skip", default=4, type=int, help="Frame skip.")
 parser.add_argument("--frame_stack", default=4, type=int, help="Frame stack.")
-parser.add_argument("--game", default="Pong", type=str, help="Game to play.")
+parser.add_argument("--game", default="Breakout", type=str, help="Game to play.")
 parser.add_argument("--grayscale", default=True, action=argparse.BooleanOptionalAction, help="Grayscale obs.")
 parser.add_argument("--screen_size", default=84, type=int, help="Screen size.")
 
