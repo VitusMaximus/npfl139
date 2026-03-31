@@ -8,28 +8,31 @@ import torch
 import npfl139
 npfl139.require_version("2526.6")
 
+import json
+
 parser = argparse.ArgumentParser()
 # These arguments will be set appropriately by ReCodEx, even if you change them.
 parser.add_argument("--env", default="LunarLander-v3", type=str, help="Environment.")
 parser.add_argument("--recodex", default=False, action="store_true", help="Running in ReCodEx")
 parser.add_argument("--render_each", default=0, type=int, help="Render some episodes.")
 parser.add_argument("--seed", default=None, type=int, help="Random seed.")
-parser.add_argument("--threads", default=1, type=int, help="Maximum number of threads to use.")
+parser.add_argument("--threads", default=0, type=int, help="Maximum number of threads to use.")
 # For these and any other arguments you add, ReCodEx will keep your default value.
-parser.add_argument("--entropy_regularization", default=..., type=float, help="Entropy regularization weight.")
-parser.add_argument("--envs", default=..., type=int, help="Number of parallel environments.")
+parser.add_argument("--entropy_regularization", default=0.01, type=float, help="Entropy regularization weight.")
+parser.add_argument("--envs", default=16, type=int, help="Number of parallel environments.")
 parser.add_argument("--evaluate_each", default=1000, type=int, help="Evaluate each number of batches.")
 parser.add_argument("--evaluate_for", default=10, type=int, help="Evaluate the given number of episodes.")
-parser.add_argument("--gamma", default=..., type=float, help="Discounting factor.")
-parser.add_argument("--hidden_layer_size", default=..., type=int, help="Size of hidden layer.")
-parser.add_argument("--learning_rate", default=..., type=float, help="Learning rate.")
+parser.add_argument("--gamma", default=0.99, type=float, help="Discounting factor.")
+parser.add_argument("--hidden_layer_size", default=128, type=int, help="Size of hidden layer.")
+parser.add_argument("--learning_rate", default=0.001, type=float, help="Learning rate.")
 parser.add_argument("--model_path", default="paac_actor.pt", type=str, help="Path to the actor model.")
 
 
+
 class Agent:
-    device = torch.device("cpu")
+    #device = torch.device("cpu")
     # Use the following line instead to use GPU if available.
-    # device = torch.device(torch.accelerator.current_accelerator() if torch.accelerator.is_available() else "cpu")
+    device = torch.device(torch.accelerator.current_accelerator() if torch.accelerator.is_available() else "cpu")
 
     def __init__(self, env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
         # TODO: Similarly to reinforce with baseline, define two components:
@@ -39,7 +42,29 @@ class Agent:
         # Use independent networks for both of them, each with
         # `args.hidden_layer_size` neurons in one ReLU hidden layer,
         # and train them using Adam with given `args.learning_rate`.
-        raise NotImplementedError()
+        self.entropy_regularization = args.entropy_regularization
+
+
+
+        self._actor = torch.nn.Sequential(
+            torch.nn.Linear(env.observation_space.shape[0], args.hidden_layer_size),
+            torch.nn.ReLU(),
+            torch.nn.Linear(args.hidden_layer_size, env.action_space.n),
+            torch.nn.LogSoftmax(dim=-1)
+        ).to(self.device)
+
+        self._critic = torch.nn.Sequential(
+            torch.nn.Linear(env.observation_space.shape[0], args.hidden_layer_size),
+            torch.nn.ReLU(),
+            torch.nn.Linear(args.hidden_layer_size, 1)
+        ).to(self.device)
+
+        self._critic_loss = torch.nn.MSELoss()
+        self._actor_loss = torch.nn.NLLLoss(reduction="none")
+
+        self._critic_optimizer = torch.optim.Adam(self._critic.parameters(), lr=args.learning_rate)
+        self._actor_optimizer = torch.optim.Adam(self._actor.parameters(), lr=args.learning_rate)
+
 
     # The `npfl139.typed_torch_function` automatically converts input arguments
     # to PyTorch tensors of given type, and converts the result to a NumPy array.
@@ -53,17 +78,39 @@ class Agent:
         # it, but my reference solution learns quicklier when using it.
         # In any case, `torch.distributions.Categorical` is a suitable distribution
         # offering the `.entropy()` method.
-        raise NotImplementedError()
+        self._critic.train()
+        self._actor.train()
+
+        critic_loss = self._critic_loss(self._critic(states).squeeze(-1), returns)
+        self._critic_optimizer.zero_grad()
+        critic_loss.backward()
+        self._critic_optimizer.step()
+
+        values = self._critic(states)
+        advantages = returns - values
+
+        log_probs = self._actor(states)
+        nll = self._actor_loss(log_probs, actions)
+        entropy = torch.distributions.Categorical(probs=log_probs.exp()).entropy()
+        actor_loss = (advantages * nll - self.entropy_regularization * entropy).mean()
+        self._actor_optimizer.zero_grad()
+        actor_loss.backward()
+        self._actor_optimizer.step()
+
 
     @npfl139.typed_torch_function(device, torch.float32)
     def predict_actions(self, states: torch.Tensor) -> np.ndarray:
         # TODO: Return predicted action probabilities.
-        raise NotImplementedError()
+        self._actor.eval()
+        with torch.no_grad():
+            return self._actor(states).exp().cpu()
 
     @npfl139.typed_torch_function(device, torch.float32)
     def predict_values(self, states: torch.Tensor) -> np.ndarray:
         # TODO: Return estimates of the value function.
-        raise NotImplementedError()
+        self._critic.eval()
+        with torch.no_grad():
+            return self._critic(states).squeeze(-1).cpu()
 
     # Serialization methods.
     def save_actor(self, path: str) -> None:
@@ -97,7 +144,7 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
         rewards, done = 0, False
         while not done:
             # TODO: Predict an action using the greedy policy.
-            action = ...
+            action = agent.predict_actions(state[None])[0].argmax()
             state, reward, terminated, truncated, _ = env.step(action)
             done = terminated or truncated
             rewards += reward
@@ -119,17 +166,19 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
         # Training
         for _ in range(args.evaluate_each):
             # TODO: Choose actions using `agent.predict_actions`.
-            actions = ...
+            probs = agent.predict_actions(states) # [envs, actions]
+            actions = torch.multinomial(torch.from_numpy(probs), num_samples=1).squeeze(-1).numpy() # [envs]
 
             # Perform steps in the vectorized environment
             next_states, rewards, terminated, truncated, _ = vector_env.step(actions)
             dones = terminated | truncated
 
             # TODO: Compute estimates of returns by one-step bootstrapping
-            ...
+            next_values = agent.predict_values(next_states) # [envs]
+            returns = rewards + args.gamma * next_values * (1 - dones)
 
             # TODO: Train agent using current states, chosen actions and estimated returns.
-            ...
+            agent.train(states, actions, returns)
 
             states = next_states
 
