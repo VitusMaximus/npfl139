@@ -81,13 +81,17 @@ class Agent:
         self._critic.train()
         self._actor.train()
 
-        critic_loss = self._critic_loss(self._critic(states).squeeze(-1), returns)
+        critic_values = self._critic(states).squeeze(-1)
+        critic_loss = self._critic_loss(critic_values, returns)
+
         self._critic_optimizer.zero_grad()
         critic_loss.backward()
         self._critic_optimizer.step()
 
-        values = self._critic(states)
+        with torch.no_grad():
+            values = self._critic(states).squeeze(-1)
         advantages = returns - values
+        advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-8)
 
         log_probs = self._actor(states)
         nll = self._actor_loss(log_probs, actions)
@@ -171,7 +175,7 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
 
             # Perform steps in the vectorized environment
             next_states, rewards, terminated, truncated, _ = vector_env.step(actions)
-            dones = terminated # | truncated
+            dones = terminated | truncated
 
             # TODO: Compute estimates of returns by one-step bootstrapping
             next_values = agent.predict_values(next_states) # [envs]
