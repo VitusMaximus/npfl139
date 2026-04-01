@@ -24,8 +24,10 @@ parser.add_argument("--evaluate_each", default=1000, type=int, help="Evaluate ea
 parser.add_argument("--evaluate_for", default=10, type=int, help="Evaluate the given number of episodes.")
 parser.add_argument("--gamma", default=0.99, type=float, help="Discounting factor.")
 parser.add_argument("--hidden_layer_size", default=128, type=int, help="Size of hidden layer.")
-parser.add_argument("--learning_rate", default=0.001, type=float, help="Learning rate.")
+parser.add_argument("--critic_learning_rate", default=0.001, type=float, help="Learning rate.")
+parser.add_argument("--actor_learning_rate", default=0.0003, type=float, help="Learning rate.")
 parser.add_argument("--model_path", default="paac_actor.pt", type=str, help="Path to the actor model.")
+parser.add_argument("--episodes", default=10_000, type=int, help="Training episodes.")
 
 
 
@@ -62,8 +64,8 @@ class Agent:
         self._critic_loss = torch.nn.MSELoss()
         self._actor_loss = torch.nn.NLLLoss(reduction="none")
 
-        self._critic_optimizer = torch.optim.Adam(self._critic.parameters(), lr=args.learning_rate)
-        self._actor_optimizer = torch.optim.Adam(self._actor.parameters(), lr=args.learning_rate)
+        self._critic_optimizer = torch.optim.Adam(self._critic.parameters(), lr=args.critic_learning_rate)
+        self._actor_optimizer = torch.optim.Adam(self._actor.parameters(), lr=args.actor_learning_rate)
 
 
     # The `npfl139.typed_torch_function` automatically converts input arguments
