@@ -15,7 +15,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--env", default="LunarLander-v3", type=str, help="Environment.")
 parser.add_argument("--recodex", default=False, action="store_true", help="Running in ReCodEx")
 parser.add_argument("--render_each", default=0, type=int, help="Render some episodes.")
-parser.add_argument("--seed", default=None, type=int, help="Random seed.")
+parser.add_argument("--seed", default=42, type=int, help="Random seed.")
 parser.add_argument("--threads", default=0, type=int, help="Maximum number of threads to use.")
 # For these and any other arguments you add, ReCodEx will keep your default value.
 parser.add_argument("--entropy_regularization", default=0.01, type=float, help="Entropy regularization weight.")
@@ -171,7 +171,7 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
 
             # Perform steps in the vectorized environment
             next_states, rewards, terminated, truncated, _ = vector_env.step(actions)
-            dones = terminated | truncated
+            dones = terminated # | truncated
 
             # TODO: Compute estimates of returns by one-step bootstrapping
             next_values = agent.predict_values(next_states) # [envs]
