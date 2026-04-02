@@ -8,6 +8,8 @@ import torch
 import npfl139
 npfl139.require_version("2526.6")
 
+from collections import deque
+
 import json
 
 parser = argparse.ArgumentParser()
@@ -171,7 +173,7 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
     vector_env = gym.make_vec(args.env, args.envs, gym.VectorizeMode.ASYNC,
                               vector_kwargs={"autoreset_mode": gym.vector.AutoresetMode.SAME_STEP})
     states = vector_env.reset(seed=args.seed)[0]
-
+    last_100_ep_returns = deque(maxlen=10)
     training = True
     while training:
 
@@ -196,8 +198,10 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
 
         # Periodic evaluation
         returns = [evaluate_episode() for _ in range(args.evaluate_for)]
+        last_100_ep_returns.append(np.mean(returns))
 
-        if np.mean(returns) >= args.reward_threshold:
+        print(f"Evaluation returns: {np.mean(last_100_ep_returns)}")
+        if np.mean(last_100_ep_returns) >= args.reward_threshold:
             break
 
         
