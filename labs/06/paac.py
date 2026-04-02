@@ -27,7 +27,7 @@ parser.add_argument("--hidden_layer_size", default=128, type=int, help="Size of 
 parser.add_argument("--critic_learning_rate", default=0.001, type=float, help="Learning rate.")
 parser.add_argument("--actor_learning_rate", default=0.0003, type=float, help="Learning rate.")
 parser.add_argument("--model_path", default="paac_actor.pt", type=str, help="Path to the actor model.")
-parser.add_argument("--episodes", default=15_000, type=int, help="Training episodes.")
+parser.add_argument("--reward_threshold", default=260, type=float, help="Reward threshold for solving the environment.")
 
 
 
@@ -67,8 +67,8 @@ class Agent:
         self._critic_optimizer = torch.optim.Adam(self._critic.parameters(), lr=args.critic_learning_rate)
         self._actor_optimizer = torch.optim.Adam(self._actor.parameters(), lr=args.actor_learning_rate)
 
-        self._critic_scheduler = torch.optim.lr_scheduler.LinearLR(self._critic_optimizer, start_factor=1.0, end_factor=0.1, total_iters=args.episodes - 3_000)
-        self._actor_scheduler = torch.optim.lr_scheduler.LinearLR(self._actor_optimizer, start_factor=1.0, end_factor=0.1, total_iters=args.episodes - 3_000)
+        #self._critic_scheduler = torch.optim.lr_scheduler.LinearLR(self._critic_optimizer, start_factor=1.0, end_factor=0.1, total_iters=args.episodes - 3_000)
+        #self._actor_scheduler = torch.optim.lr_scheduler.LinearLR(self._actor_optimizer, start_factor=1.0, end_factor=0.1, total_iters=args.episodes - 3_000)
 
 
     # The `npfl139.typed_torch_function` automatically converts input arguments
@@ -105,8 +105,8 @@ class Agent:
         self._actor_optimizer.zero_grad()
         actor_loss.backward()
         self._actor_optimizer.step()
-        self._critic_scheduler.step()
-        self._actor_scheduler.step()
+        #self._critic_scheduler.step()
+        #self._actor_scheduler.step()
 
 
     @npfl139.typed_torch_function(device, torch.float32)
@@ -172,12 +172,8 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
                               vector_kwargs={"autoreset_mode": gym.vector.AutoresetMode.SAME_STEP})
     states = vector_env.reset(seed=args.seed)[0]
 
-    episodes = 0
     training = True
     while training:
-        episodes += 1
-        if episodes >= args.episodes:
-            training = False
 
         # Training
         for _ in range(args.evaluate_each):
@@ -200,6 +196,9 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
 
         # Periodic evaluation
         returns = [evaluate_episode() for _ in range(args.evaluate_for)]
+        
+        if returns.mean() >= args.reward_threshold:
+            break
 
         
 
@@ -208,6 +207,7 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
     agent.save_args(args.model_path + ".json", args)
 
     # Final evaluation
+    print("Final evaluation:")
     while True:
         evaluate_episode(start_evaluation=True)
 
