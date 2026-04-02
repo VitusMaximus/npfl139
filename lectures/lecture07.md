@@ -3,6 +3,8 @@
 #### Slides: https://ufal.mff.cuni.cz/~straka/courses/npfl139/2526/slides/?07
 #### Reading: https://ufal.mff.cuni.cz/~straka/courses/npfl139/2526/slides.pdf/npfl139-2526-07.pdf,PDF Slides
 #### Video: https://lectures.ms.mff.cuni.cz/video/rec/npfl139/2526/npfl139-2526-07.mp4, Lecture
+#### Video: https://lectures.ms.mff.cuni.cz/video/rec/npfl139/2526/npfl139-2526-07.sac_conclusion.mp4, SAC Conclusion
+#### Video: https://lectures.ms.mff.cuni.cz/video/rec/npfl139/2526/npfl139-2526-07.practicals.mp4, Practicals
 #### Questions: #lecture_7_questions
 #### Lecture assignment: paac_continuous
 #### Lecture assignment: ddpg
