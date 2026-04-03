@@ -1,0 +1,82 @@
+Wed Mar 18 11:04:56 2026       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 525.85.12    Driver Version: 525.85.12    CUDA Version: 12.0     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  Quadro P5000        Off  | 00000000:83:00.0 Off |                  Off |
+| 26%   27C    P8     5W / 180W |      1MiB / 16384MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+Permute torch.Size([1, 12, 96, 96])
+Conv2d torch.Size([1, 32, 47, 47])
+ReLU torch.Size([1, 32, 47, 47])
+Conv2d torch.Size([1, 64, 23, 23])
+ReLU torch.Size([1, 64, 23, 23])
+Conv2d torch.Size([1, 64, 11, 11])
+ReLU torch.Size([1, 64, 11, 11])
+Conv2d torch.Size([1, 64, 5, 5])
+ReLU torch.Size([1, 64, 5, 5])
+AdaptiveAvgPool2d torch.Size([1, 64, 2, 2])
+Flatten torch.Size([1, 256])
+Linear torch.Size([1, 256])
+ReLU torch.Size([1, 256])
+Linear torch.Size([1, 5])
+Permute torch.Size([1, 12, 96, 96])
+Conv2d torch.Size([1, 32, 47, 47])
+ReLU torch.Size([1, 32, 47, 47])
+Conv2d torch.Size([1, 64, 23, 23])
+ReLU torch.Size([1, 64, 23, 23])
+Conv2d torch.Size([1, 64, 11, 11])
+ReLU torch.Size([1, 64, 11, 11])
+Conv2d torch.Size([1, 64, 5, 5])
+ReLU torch.Size([1, 64, 5, 5])
+AdaptiveAvgPool2d torch.Size([1, 64, 2, 2])
+Flatten torch.Size([1, 256])
+Linear torch.Size([1, 256])
+ReLU torch.Size([1, 256])
+Linear torch.Size([1, 5])
+Epsilon: 1.000000
+Epsilon: 0.998761
+Episodes: 80, Step: 1254, mean return (last 80): -49.06
+Epsilon: 0.997524
+Episodes: 160, Step: 2509, mean return (last 100): -46.71
+Epsilon: 0.996286
+Episodes: 240, Step: 3764, mean return (last 100): -51.37
+Epsilon: 0.995049
+Epsilon: 0.993811
+Episodes: 320, Step: 5019, mean return (last 100): -49.89
+Epsilon: 0.992574
+Episodes: 400, Step: 6274, mean return (last 100): -50.55
+Epsilon: 0.991336
+Episodes: 480, Step: 7529, mean return (last 100): -53.10
+Epsilon: 0.990099
+Episodes: 560, Step: 8784, mean return (last 100): -50.26
+Epsilon: 0.988861
+Epsilon: 0.987624
+Episodes: 640, Step: 10039, mean return (last 100): -49.02
+Epsilon: 0.986386
+Episodes: 720, Step: 11294, mean return (last 100): -50.01
+Epsilon: 0.985149
+Episodes: 800, Step: 12549, mean return (last 100): -50.01
+Epsilon: 0.983911
+Episodes: 880, Step: 13804, mean return (last 100): -48.77
+Epsilon: 0.982674
+Epsilon: 0.981436
+Episodes: 960, Step: 15059, mean return (last 100): -51.19
+Epsilon: 0.980199
+Updating target network.
+Episodes: 1040, Step: 16314, mean return (last 100): -51.63
+Epsilon: 0.978961
+Episodes: 1120, Step: 17569, mean return (last 100): -52.05
+Epsilon: 0.977724

@@ -1,0 +1,10 @@
+usage: paac.py [-h] [--env ENV] [--recodex] [--render_each RENDER_EACH]
+               [--seed SEED] [--threads THREADS]
+               [--entropy_regularization ENTROPY_REGULARIZATION] [--envs ENVS]
+               [--evaluate_each EVALUATE_EACH] [--evaluate_for EVALUATE_FOR]
+               [--gamma GAMMA] [--hidden_layer_size HIDDEN_LAYER_SIZE]
+               [--learning_rate LEARNING_RATE] [--model_path MODEL_PATH]
+paac.py: error: unrecognized arguments: --num_envs 16
+slurmstepd: error: common_file_write_uint32s: write pid 2659988 to /sys/fs/cgroup/cgroup.procs failed: Device or resource busy
+slurmstepd: error: Unable to move pid 2659988 to init root cgroup /sys/fs/cgroup
+slurmstepd: error: error unlocking cgroup '/sys/fs/cgroup/system.slice/slurmstepd.scope' : Bad file descriptor

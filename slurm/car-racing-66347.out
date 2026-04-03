@@ -1,0 +1,1399 @@
+Tue Mar 17 09:33:29 2026       
++---------------------------------------------------------------------------------------+
+| NVIDIA-SMI 545.23.08              Driver Version: 545.23.08    CUDA Version: 12.3     |
+|-----------------------------------------+----------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
+|                                         |                      |               MIG M. |
+|=========================================+======================+======================|
+|   0  NVIDIA RTX A4000               Off | 00000000:04:00.0 Off |                  Off |
+| 41%   50C    P5              37W / 140W |      2MiB / 16376MiB |      0%      Default |
+|                                         |                      |                  N/A |
++-----------------------------------------+----------------------+----------------------+
+                                                                                         
++---------------------------------------------------------------------------------------+
+| Processes:                                                                            |
+|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+|        ID   ID                                                             Usage      |
+|=======================================================================================|
+|  No running processes found                                                           |
++---------------------------------------------------------------------------------------+
+Permute torch.Size([1, 12, 48, 48])
+Conv2d torch.Size([1, 32, 23, 23])
+ReLU torch.Size([1, 32, 23, 23])
+Conv2d torch.Size([1, 64, 11, 11])
+ReLU torch.Size([1, 64, 11, 11])
+Conv2d torch.Size([1, 64, 5, 5])
+ReLU torch.Size([1, 64, 5, 5])
+AdaptiveAvgPool2d torch.Size([1, 64, 2, 2])
+Flatten torch.Size([1, 256])
+Linear torch.Size([1, 256])
+ReLU torch.Size([1, 256])
+Linear torch.Size([1, 5])
+Permute torch.Size([1, 12, 48, 48])
+Conv2d torch.Size([1, 32, 23, 23])
+ReLU torch.Size([1, 32, 23, 23])
+Conv2d torch.Size([1, 64, 11, 11])
+ReLU torch.Size([1, 64, 11, 11])
+Conv2d torch.Size([1, 64, 5, 5])
+ReLU torch.Size([1, 64, 5, 5])
+AdaptiveAvgPool2d torch.Size([1, 64, 2, 2])
+Flatten torch.Size([1, 256])
+Linear torch.Size([1, 256])
+ReLU torch.Size([1, 256])
+Linear torch.Size([1, 5])
+Epsilon: 1.000000
+Epsilon: 0.995045
+Episodes: 80, Step: 1254, mean return (last 80): -50.68
+Epsilon: 0.990095
+Episodes: 160, Step: 2509, mean return (last 100): -49.67
+Epsilon: 0.985145
+Episodes: 240, Step: 3764, mean return (last 100): -47.70
+Epsilon: 0.980195
+Epsilon: 0.975245
+Episodes: 320, Step: 5019, mean return (last 100): -50.02
+Epsilon: 0.970295
+Episodes: 400, Step: 6274, mean return (last 100): -51.05
+Epsilon: 0.965345
+Episodes: 480, Step: 7529, mean return (last 100): -51.23
+Epsilon: 0.960395
+Episodes: 560, Step: 8784, mean return (last 100): -47.53
+Epsilon: 0.955445
+Updating target network.
+Epsilon: 0.950495
+Episodes: 640, Step: 10039, mean return (last 100): -49.46
+Epsilon: 0.945545
+Episodes: 720, Step: 11294, mean return (last 100): -52.01
+Epsilon: 0.940595
+Episodes: 800, Step: 12549, mean return (last 100): -48.98
+Epsilon: 0.935645
+Episodes: 880, Step: 13804, mean return (last 100): -47.42
+Epsilon: 0.930695
+Updating target network.
+Epsilon: 0.925745
+Episodes: 960, Step: 15059, mean return (last 100): -49.59
+Epsilon: 0.920795
+Episodes: 1040, Step: 16314, mean return (last 100): -49.15
+Epsilon: 0.915845
+Episodes: 1120, Step: 17569, mean return (last 100): -48.51
+Epsilon: 0.910895
+Episodes: 1200, Step: 18824, mean return (last 100): -50.97
+Epsilon: 0.905945
+Updating target network.
+Epsilon: 0.900995
+Episodes: 1280, Step: 20079, mean return (last 100): -46.32
+Epsilon: 0.896045
+Episodes: 1360, Step: 21334, mean return (last 100): -42.40
+Epsilon: 0.891095
+Episodes: 1440, Step: 22589, mean return (last 100): -51.37
+Epsilon: 0.886145
+Episodes: 1520, Step: 23844, mean return (last 100): -51.27
+Epsilon: 0.881195
+Updating target network.
+Epsilon: 0.876245
+Episodes: 1600, Step: 25099, mean return (last 100): -49.36
+Epsilon: 0.871295
+Episodes: 1680, Step: 26354, mean return (last 100): -52.74
+Epsilon: 0.866345
+Episodes: 1760, Step: 27609, mean return (last 100): -50.91
+Epsilon: 0.861395
+Episodes: 1840, Step: 28864, mean return (last 100): -47.07
+Epsilon: 0.856445
+Updating target network.
+Epsilon: 0.851495
+Episodes: 1920, Step: 30119, mean return (last 100): -47.45
+Epsilon: 0.846545
+Episodes: 2000, Step: 31374, mean return (last 100): -47.14
+Epsilon: 0.841595
+Episodes: 2080, Step: 32629, mean return (last 100): -46.33
+Epsilon: 0.836645
+Episodes: 2160, Step: 33884, mean return (last 100): -44.81
+Epsilon: 0.831695
+Updating target network.
+Epsilon: 0.826745
+Episodes: 2240, Step: 35139, mean return (last 100): -44.55
+Epsilon: 0.821795
+Episodes: 2320, Step: 36394, mean return (last 100): -48.41
+Epsilon: 0.816845
+Episodes: 2400, Step: 37649, mean return (last 100): -42.16
+Epsilon: 0.811895
+Episodes: 2480, Step: 38904, mean return (last 100): -40.46
+Epsilon: 0.806945
+Updating target network.
+Epsilon: 0.801995
+Episodes: 2560, Step: 40159, mean return (last 100): -43.71
+Epsilon: 0.797045
+Episodes: 2640, Step: 41414, mean return (last 100): -43.23
+Epsilon: 0.792095
+Episodes: 2720, Step: 42669, mean return (last 100): -44.53
+Epsilon: 0.787145
+Episodes: 2800, Step: 43924, mean return (last 100): -46.08
+Epsilon: 0.782195
+Updating target network.
+Epsilon: 0.777245
+Episodes: 2880, Step: 45179, mean return (last 100): -43.43
+Epsilon: 0.772295
+Episodes: 2960, Step: 46434, mean return (last 100): -41.29
+Epsilon: 0.767345
+Episodes: 3040, Step: 47689, mean return (last 100): -40.33
+Epsilon: 0.762395
+Episodes: 3120, Step: 48944, mean return (last 100): -37.64
+Epsilon: 0.757445
+Updating target network.
+Epsilon: 0.752495
+Episodes: 3200, Step: 50199, mean return (last 100): -36.78
+Epsilon: 0.747545
+Episodes: 3250, Step: 51190, mean return (last 100): -36.71
+Episodes: 3280, Step: 51454, mean return (last 100): -30.58
+Epsilon: 0.742595
+Episodes: 3330, Step: 52445, mean return (last 100): -34.70
+Episodes: 3360, Step: 52709, mean return (last 100): -30.86
+Epsilon: 0.737645
+Episodes: 3410, Step: 53700, mean return (last 100): -27.73
+Episodes: 3440, Step: 53964, mean return (last 100): -27.24
+Epsilon: 0.732695
+Episodes: 3490, Step: 54955, mean return (last 100): -25.79
+Updating target network.
+Epsilon: 0.727745
+Episodes: 3520, Step: 55219, mean return (last 100): -22.87
+Epsilon: 0.722795
+Episodes: 3570, Step: 56210, mean return (last 100): -27.45
+Episodes: 3600, Step: 56474, mean return (last 100): -29.97
+Epsilon: 0.717845
+Episodes: 3650, Step: 57465, mean return (last 100): -28.65
+Episodes: 3680, Step: 57729, mean return (last 100): -28.18
+Epsilon: 0.712895
+Episodes: 3730, Step: 58717, mean return (last 100): -16.63
+Episodes: 3760, Step: 58984, mean return (last 100): -14.16
+Epsilon: 0.707945
+Episodes: 3810, Step: 59969, mean return (last 100): -19.78
+Updating target network.
+Epsilon: 0.702995
+Episodes: 3840, Step: 60239, mean return (last 100): -23.58
+Epsilon: 0.698045
+Episodes: 3890, Step: 61224, mean return (last 100): -18.98
+Episodes: 3920, Step: 61494, mean return (last 100): -12.54
+Epsilon: 0.693095
+Episodes: 3970, Step: 62479, mean return (last 100): -5.95
+Episodes: 4000, Step: 62749, mean return (last 100): -7.19
+Epsilon: 0.688145
+Episodes: 4020, Step: 63235, mean return (last 100): -7.51
+Epsilon: 0.683195
+Episodes: 4080, Step: 64004, mean return (last 100): -10.10
+Episodes: 4100, Step: 64490, mean return (last 100): -8.62
+Updating target network.
+Epsilon: 0.678245
+Episodes: 4160, Step: 65259, mean return (last 100): -9.02
+Episodes: 4180, Step: 65745, mean return (last 100): -7.26
+Epsilon: 0.673295
+Episodes: 4240, Step: 66514, mean return (last 100): 1.96
+Episodes: 4260, Step: 67000, mean return (last 100): 6.55
+Epsilon: 0.668345
+Episodes: 4290, Step: 67488, mean return (last 100): 6.09
+Episodes: 4320, Step: 67769, mean return (last 100): 6.96
+Epsilon: 0.663395
+Episodes: 4340, Step: 68252, mean return (last 100): 7.67
+Episodes: 4370, Step: 68743, mean return (last 100): 4.06
+Epsilon: 0.658445
+Episodes: 4400, Step: 69024, mean return (last 100): 6.39
+Episodes: 4420, Step: 69507, mean return (last 100): 5.15
+Episodes: 4450, Step: 69998, mean return (last 100): 5.31
+Updating target network.
+Epsilon: 0.653495
+Episodes: 4480, Step: 70279, mean return (last 100): 2.78
+Episodes: 4500, Step: 70762, mean return (last 100): 6.03
+Epsilon: 0.648545
+Episodes: 4530, Step: 71253, mean return (last 100): 7.84
+Episodes: 4560, Step: 71534, mean return (last 100): 15.38
+Epsilon: 0.643595
+Episodes: 4580, Step: 72017, mean return (last 100): 14.73
+Episodes: 4610, Step: 72508, mean return (last 100): 16.99
+Episodes: 4640, Step: 72789, mean return (last 100): 19.83
+Epsilon: 0.638645
+Episodes: 4660, Step: 73272, mean return (last 100): 24.62
+Episodes: 4690, Step: 73763, mean return (last 100): 27.32
+Epsilon: 0.633695
+Episodes: 4720, Step: 74044, mean return (last 100): 24.80
+Episodes: 4740, Step: 74527, mean return (last 100): 23.98
+Updating target network.
+Epsilon: 0.628745
+Episodes: 4770, Step: 75018, mean return (last 100): 22.67
+Episodes: 4800, Step: 75299, mean return (last 100): 27.75
+Episodes: 4820, Step: 75782, mean return (last 100): 27.63
+Epsilon: 0.623795
+Episodes: 4850, Step: 76273, mean return (last 100): 26.48
+Episodes: 4880, Step: 76554, mean return (last 100): 18.02
+Epsilon: 0.618845
+Episodes: 4900, Step: 77037, mean return (last 100): 17.81
+Episodes: 4930, Step: 77528, mean return (last 100): 17.64
+Episodes: 4960, Step: 77809, mean return (last 100): 19.37
+Epsilon: 0.613895
+Episodes: 4980, Step: 78292, mean return (last 100): 30.00
+Episodes: 5010, Step: 78783, mean return (last 100): 27.88
+Epsilon: 0.608945
+Episodes: 5040, Step: 79064, mean return (last 100): 30.15
+Episodes: 5060, Step: 79547, mean return (last 100): 31.80
+Updating target network.
+Epsilon: 0.603995
+Episodes: 5090, Step: 80038, mean return (last 100): 31.17
+Episodes: 5120, Step: 80319, mean return (last 100): 33.78
+Episodes: 5140, Step: 80802, mean return (last 100): 37.76
+Epsilon: 0.599045
+Episodes: 5170, Step: 81293, mean return (last 100): 29.35
+Episodes: 5200, Step: 81574, mean return (last 100): 24.70
+Epsilon: 0.594095
+Episodes: 5250, Step: 82540, mean return (last 100): 17.05
+Episodes: 5270, Step: 82810, mean return (last 100): 12.82
+Episodes: 5280, Step: 82829, mean return (last 100): 11.76
+Epsilon: 0.589145
+Episodes: 5300, Step: 83302, mean return (last 100): 13.21
+Episodes: 5320, Step: 83571, mean return (last 100): 15.39
+Episodes: 5330, Step: 83795, mean return (last 100): 15.66
+Epsilon: 0.584195
+Episodes: 5350, Step: 84065, mean return (last 100): 13.65
+Episodes: 5360, Step: 84084, mean return (last 100): 14.40
+Episodes: 5380, Step: 84556, mean return (last 100): 17.13
+Episodes: 5400, Step: 84818, mean return (last 100): 17.41
+Updating target network.
+Epsilon: 0.579245
+Episodes: 5410, Step: 85023, mean return (last 100): 22.84
+Episodes: 5430, Step: 85310, mean return (last 100): 19.10
+Episodes: 5440, Step: 85339, mean return (last 100): 23.82
+Episodes: 5450, Step: 85579, mean return (last 100): 30.78
+Episodes: 5460, Step: 85809, mean return (last 100): 33.84
+Epsilon: 0.574295
+Episodes: 5480, Step: 86071, mean return (last 100): 39.82
+Episodes: 5490, Step: 86278, mean return (last 100): 41.26
+Episodes: 5520, Step: 86594, mean return (last 100): 52.35
+Episodes: 5530, Step: 86827, mean return (last 100): 54.73
+Epsilon: 0.569345
+Episodes: 5540, Step: 87058, mean return (last 100): 46.84
+Episodes: 5560, Step: 87326, mean return (last 100): 42.66
+Episodes: 5570, Step: 87528, mean return (last 100): 45.31
+Episodes: 5600, Step: 87849, mean return (last 100): 44.06
+Epsilon: 0.564395
+Episodes: 5610, Step: 88082, mean return (last 100): 44.78
+Episodes: 5620, Step: 88313, mean return (last 100): 45.91
+Episodes: 5640, Step: 88581, mean return (last 100): 51.46
+Episodes: 5650, Step: 88783, mean return (last 100): 53.13
+Epsilon: 0.559445
+Episodes: 5680, Step: 89104, mean return (last 100): 53.48
+Episodes: 5690, Step: 89337, mean return (last 100): 52.96
+Episodes: 5700, Step: 89541, mean return (last 100): 48.12
+Episodes: 5720, Step: 89827, mean return (last 100): 49.87
+Updating target network.
+Epsilon: 0.554495
+Episodes: 5730, Step: 90005, mean return (last 100): 51.04
+Episodes: 5750, Step: 90327, mean return (last 100): 49.72
+Episodes: 5760, Step: 90359, mean return (last 100): 46.71
+Episodes: 5770, Step: 90592, mean return (last 100): 45.22
+Episodes: 5780, Step: 90796, mean return (last 100): 46.04
+Epsilon: 0.549545
+Episodes: 5800, Step: 91082, mean return (last 100): 48.31
+Episodes: 5810, Step: 91260, mean return (last 100): 43.82
+Episodes: 5830, Step: 91570, mean return (last 100): 30.21
+Episodes: 5840, Step: 91614, mean return (last 100): 23.23
+Episodes: 5850, Step: 91835, mean return (last 100): 22.07
+Epsilon: 0.544595
+Episodes: 5860, Step: 92051, mean return (last 100): 22.97
+Episodes: 5880, Step: 92323, mean return (last 100): 16.05
+Episodes: 5890, Step: 92504, mean return (last 100): 16.49
+Episodes: 5900, Step: 92588, mean return (last 100): 14.48
+Episodes: 5910, Step: 92815, mean return (last 100): 11.79
+Episodes: 5920, Step: 92869, mean return (last 100): 14.08
+Epsilon: 0.539645
+Episodes: 5930, Step: 93088, mean return (last 100): 20.56
+Episodes: 5940, Step: 93283, mean return (last 100): 22.07
+Episodes: 5960, Step: 93578, mean return (last 100): 18.86
+Episodes: 5970, Step: 93754, mean return (last 100): 19.92
+Episodes: 5980, Step: 93843, mean return (last 100): 24.16
+Epsilon: 0.534695
+Episodes: 5990, Step: 94070, mean return (last 100): 21.26
+Episodes: 6000, Step: 94124, mean return (last 100): 23.61
+Episodes: 6010, Step: 94343, mean return (last 100): 24.01
+Episodes: 6020, Step: 94538, mean return (last 100): 24.90
+Episodes: 6040, Step: 94833, mean return (last 100): 27.99
+Updating target network.
+Epsilon: 0.529745
+Episodes: 6050, Step: 95009, mean return (last 100): 30.43
+Episodes: 6070, Step: 95325, mean return (last 100): 29.87
+Episodes: 6080, Step: 95379, mean return (last 100): 30.15
+Episodes: 6090, Step: 95595, mean return (last 100): 31.79
+Episodes: 6100, Step: 95793, mean return (last 100): 30.19
+Episodes: 6110, Step: 95863, mean return (last 100): 37.17
+Epsilon: 0.524795
+Episodes: 6120, Step: 96088, mean return (last 100): 41.02
+Episodes: 6130, Step: 96264, mean return (last 100): 43.20
+Episodes: 6150, Step: 96580, mean return (last 100): 48.00
+Episodes: 6160, Step: 96634, mean return (last 100): 55.69
+Episodes: 6170, Step: 96850, mean return (last 100): 56.70
+Epsilon: 0.519845
+Episodes: 6180, Step: 97048, mean return (last 100): 57.71
+Episodes: 6190, Step: 97118, mean return (last 100): 59.44
+Episodes: 6200, Step: 97343, mean return (last 100): 60.75
+Episodes: 6210, Step: 97519, mean return (last 100): 57.69
+Episodes: 6230, Step: 97835, mean return (last 100): 56.43
+Episodes: 6240, Step: 97889, mean return (last 100): 57.94
+Epsilon: 0.514895
+Episodes: 6250, Step: 98105, mean return (last 100): 58.23
+Episodes: 6260, Step: 98303, mean return (last 100): 55.11
+Episodes: 6270, Step: 98373, mean return (last 100): 54.71
+Episodes: 6280, Step: 98596, mean return (last 100): 56.74
+Episodes: 6290, Step: 98774, mean return (last 100): 58.11
+Epsilon: 0.509945
+Episodes: 6310, Step: 99090, mean return (last 100): 60.03
+Episodes: 6320, Step: 99144, mean return (last 100): 60.24
+Episodes: 6330, Step: 99360, mean return (last 100): 55.17
+Episodes: 6340, Step: 99558, mean return (last 100): 55.64
+Episodes: 6350, Step: 99628, mean return (last 100): 59.05
+Episodes: 6360, Step: 99851, mean return (last 100): 61.85
+Updating target network.
+Epsilon: 0.504995
+Episodes: 6370, Step: 100029, mean return (last 100): 61.82
+Episodes: 6390, Step: 100345, mean return (last 100): 58.31
+Episodes: 6400, Step: 100399, mean return (last 100): 60.08
+Episodes: 6410, Step: 100615, mean return (last 100): 64.71
+Episodes: 6420, Step: 100813, mean return (last 100): 66.41
+Episodes: 6430, Step: 100883, mean return (last 100): 72.27
+Epsilon: 0.500045
+Episodes: 6440, Step: 101106, mean return (last 100): 72.28
+Episodes: 6450, Step: 101284, mean return (last 100): 68.93
+Episodes: 6470, Step: 101600, mean return (last 100): 71.00
+Episodes: 6480, Step: 101654, mean return (last 100): 72.93
+Episodes: 6490, Step: 101870, mean return (last 100): 73.55
+Epsilon: 0.495095
+Episodes: 6500, Step: 102068, mean return (last 100): 71.28
+Episodes: 6510, Step: 102138, mean return (last 100): 69.71
+Episodes: 6520, Step: 102361, mean return (last 100): 69.98
+Episodes: 6530, Step: 102539, mean return (last 100): 68.80
+Episodes: 6550, Step: 102855, mean return (last 100): 66.16
+Episodes: 6560, Step: 102909, mean return (last 100): 64.69
+Epsilon: 0.490145
+Episodes: 6570, Step: 103125, mean return (last 100): 68.04
+Episodes: 6580, Step: 103323, mean return (last 100): 67.50
+Episodes: 6590, Step: 103393, mean return (last 100): 69.47
+Episodes: 6600, Step: 103616, mean return (last 100): 69.11
+Episodes: 6610, Step: 103794, mean return (last 100): 68.04
+Epsilon: 0.485195
+Episodes: 6630, Step: 104110, mean return (last 100): 70.86
+Episodes: 6640, Step: 104164, mean return (last 100): 73.56
+Episodes: 6650, Step: 104380, mean return (last 100): 76.33
+Episodes: 6660, Step: 104578, mean return (last 100): 75.35
+Episodes: 6670, Step: 104648, mean return (last 100): 72.72
+Episodes: 6680, Step: 104871, mean return (last 100): 73.03
+Updating target network.
+Epsilon: 0.480245
+Episodes: 6690, Step: 105049, mean return (last 100): 74.06
+Episodes: 6710, Step: 105365, mean return (last 100): 77.86
+Episodes: 6720, Step: 105419, mean return (last 100): 78.48
+Episodes: 6730, Step: 105635, mean return (last 100): 71.93
+Episodes: 6740, Step: 105833, mean return (last 100): 71.65
+Episodes: 6750, Step: 105903, mean return (last 100): 70.60
+Epsilon: 0.475295
+Episodes: 6760, Step: 106126, mean return (last 100): 70.57
+Episodes: 6770, Step: 106304, mean return (last 100): 69.72
+Episodes: 6790, Step: 106620, mean return (last 100): 68.54
+Episodes: 6800, Step: 106674, mean return (last 100): 66.82
+Episodes: 6810, Step: 106890, mean return (last 100): 67.66
+Epsilon: 0.470345
+Episodes: 6820, Step: 107088, mean return (last 100): 64.95
+Episodes: 6830, Step: 107158, mean return (last 100): 70.00
+Episodes: 6840, Step: 107381, mean return (last 100): 69.83
+Episodes: 6850, Step: 107559, mean return (last 100): 75.25
+Episodes: 6870, Step: 107875, mean return (last 100): 80.58
+Episodes: 6880, Step: 107929, mean return (last 100): 78.91
+Epsilon: 0.465395
+Episodes: 6890, Step: 108145, mean return (last 100): 84.28
+Episodes: 6900, Step: 108343, mean return (last 100): 84.45
+Episodes: 6910, Step: 108413, mean return (last 100): 84.60
+Episodes: 6920, Step: 108636, mean return (last 100): 92.78
+Episodes: 6930, Step: 108814, mean return (last 100): 89.21
+Epsilon: 0.460445
+Episodes: 6950, Step: 109130, mean return (last 100): 89.90
+Episodes: 6960, Step: 109184, mean return (last 100): 91.10
+Episodes: 6970, Step: 109400, mean return (last 100): 90.37
+Episodes: 6980, Step: 109598, mean return (last 100): 87.02
+Episodes: 6990, Step: 109668, mean return (last 100): 84.15
+Episodes: 7000, Step: 109891, mean return (last 100): 85.57
+Updating target network.
+Epsilon: 0.455495
+Episodes: 7010, Step: 110069, mean return (last 100): 81.44
+Episodes: 7030, Step: 110385, mean return (last 100): 79.79
+Episodes: 7040, Step: 110439, mean return (last 100): 80.11
+Episodes: 7050, Step: 110655, mean return (last 100): 81.97
+Episodes: 7060, Step: 110853, mean return (last 100): 82.17
+Episodes: 7070, Step: 110923, mean return (last 100): 86.20
+Epsilon: 0.450545
+Episodes: 7080, Step: 111146, mean return (last 100): 91.77
+Episodes: 7090, Step: 111324, mean return (last 100): 93.62
+Episodes: 7110, Step: 111640, mean return (last 100): 105.50
+Episodes: 7120, Step: 111694, mean return (last 100): 107.07
+Episodes: 7130, Step: 111910, mean return (last 100): 109.94
+Epsilon: 0.445595
+Episodes: 7140, Step: 112108, mean return (last 100): 110.01
+Episodes: 7150, Step: 112178, mean return (last 100): 112.11
+Episodes: 7160, Step: 112401, mean return (last 100): 114.63
+Episodes: 7170, Step: 112579, mean return (last 100): 114.75
+Episodes: 7190, Step: 112895, mean return (last 100): 116.18
+Episodes: 7200, Step: 112949, mean return (last 100): 112.80
+Epsilon: 0.440645
+Episodes: 7210, Step: 113165, mean return (last 100): 111.44
+Episodes: 7220, Step: 113363, mean return (last 100): 114.33
+Episodes: 7230, Step: 113433, mean return (last 100): 113.03
+Episodes: 7240, Step: 113656, mean return (last 100): 113.69
+Episodes: 7250, Step: 113834, mean return (last 100): 116.00
+Epsilon: 0.435695
+Episodes: 7270, Step: 114150, mean return (last 100): 118.44
+Episodes: 7280, Step: 114204, mean return (last 100): 119.41
+Episodes: 7290, Step: 114420, mean return (last 100): 122.72
+Episodes: 7300, Step: 114618, mean return (last 100): 122.36
+Episodes: 7310, Step: 114688, mean return (last 100): 123.67
+Episodes: 7320, Step: 114911, mean return (last 100): 122.80
+Updating target network.
+Epsilon: 0.430745
+Episodes: 7330, Step: 115089, mean return (last 100): 124.16
+Episodes: 7350, Step: 115405, mean return (last 100): 120.75
+Episodes: 7360, Step: 115459, mean return (last 100): 117.49
+Episodes: 7370, Step: 115675, mean return (last 100): 117.92
+Episodes: 7380, Step: 115873, mean return (last 100): 117.84
+Episodes: 7390, Step: 115943, mean return (last 100): 116.11
+Epsilon: 0.425795
+Episodes: 7400, Step: 116166, mean return (last 100): 114.08
+Episodes: 7410, Step: 116344, mean return (last 100): 114.45
+Episodes: 7430, Step: 116660, mean return (last 100): 118.12
+Episodes: 7440, Step: 116714, mean return (last 100): 120.80
+Episodes: 7450, Step: 116930, mean return (last 100): 118.28
+Epsilon: 0.420845
+Episodes: 7460, Step: 117128, mean return (last 100): 118.79
+Episodes: 7470, Step: 117198, mean return (last 100): 117.99
+Episodes: 7480, Step: 117421, mean return (last 100): 113.92
+Episodes: 7490, Step: 117599, mean return (last 100): 115.46
+Episodes: 7510, Step: 117915, mean return (last 100): 125.15
+Episodes: 7520, Step: 117969, mean return (last 100): 125.89
+Epsilon: 0.415895
+Episodes: 7530, Step: 118185, mean return (last 100): 122.99
+Episodes: 7540, Step: 118383, mean return (last 100): 121.49
+Episodes: 7550, Step: 118453, mean return (last 100): 121.94
+Episodes: 7560, Step: 118676, mean return (last 100): 120.86
+Episodes: 7570, Step: 118854, mean return (last 100): 125.44
+Epsilon: 0.410945
+Episodes: 7590, Step: 119170, mean return (last 100): 128.04
+Episodes: 7600, Step: 119224, mean return (last 100): 126.89
+Episodes: 7610, Step: 119440, mean return (last 100): 122.11
+Episodes: 7620, Step: 119638, mean return (last 100): 125.50
+Episodes: 7630, Step: 119708, mean return (last 100): 126.02
+Episodes: 7640, Step: 119931, mean return (last 100): 126.06
+Updating target network.
+Epsilon: 0.405995
+Episodes: 7650, Step: 120109, mean return (last 100): 127.40
+Episodes: 7670, Step: 120425, mean return (last 100): 123.38
+Episodes: 7680, Step: 120479, mean return (last 100): 126.92
+Episodes: 7690, Step: 120695, mean return (last 100): 127.99
+Episodes: 7700, Step: 120893, mean return (last 100): 127.11
+Episodes: 7710, Step: 120963, mean return (last 100): 127.89
+Epsilon: 0.401045
+Episodes: 7720, Step: 121186, mean return (last 100): 128.37
+Episodes: 7730, Step: 121364, mean return (last 100): 131.52
+Episodes: 7750, Step: 121680, mean return (last 100): 136.05
+Episodes: 7760, Step: 121734, mean return (last 100): 137.42
+Episodes: 7770, Step: 121950, mean return (last 100): 136.39
+Epsilon: 0.396095
+Episodes: 7780, Step: 122148, mean return (last 100): 136.07
+Episodes: 7790, Step: 122218, mean return (last 100): 135.08
+Episodes: 7800, Step: 122441, mean return (last 100): 136.17
+Episodes: 7810, Step: 122619, mean return (last 100): 138.58
+Episodes: 7830, Step: 122935, mean return (last 100): 138.47
+Episodes: 7840, Step: 122989, mean return (last 100): 138.70
+Epsilon: 0.391145
+Episodes: 7850, Step: 123205, mean return (last 100): 140.56
+Episodes: 7860, Step: 123403, mean return (last 100): 139.26
+Episodes: 7870, Step: 123473, mean return (last 100): 142.01
+Episodes: 7880, Step: 123696, mean return (last 100): 143.03
+Episodes: 7890, Step: 123874, mean return (last 100): 144.49
+Epsilon: 0.386195
+Episodes: 7910, Step: 124190, mean return (last 100): 145.05
+Episodes: 7920, Step: 124244, mean return (last 100): 139.65
+Episodes: 7930, Step: 124460, mean return (last 100): 140.24
+Episodes: 7940, Step: 124658, mean return (last 100): 139.06
+Episodes: 7950, Step: 124728, mean return (last 100): 139.28
+Episodes: 7960, Step: 124951, mean return (last 100): 145.32
+Updating target network.
+Epsilon: 0.381245
+Episodes: 7970, Step: 125129, mean return (last 100): 148.40
+Episodes: 7990, Step: 125445, mean return (last 100): 150.84
+Episodes: 8000, Step: 125499, mean return (last 100): 156.43
+Episodes: 8010, Step: 125715, mean return (last 100): 158.85
+Episodes: 8020, Step: 125913, mean return (last 100): 162.58
+Episodes: 8030, Step: 125983, mean return (last 100): 161.87
+Epsilon: 0.376295
+Episodes: 8040, Step: 126206, mean return (last 100): 161.99
+Episodes: 8050, Step: 126384, mean return (last 100): 161.41
+Episodes: 8070, Step: 126700, mean return (last 100): 157.81
+Episodes: 8080, Step: 126754, mean return (last 100): 156.29
+Episodes: 8090, Step: 126970, mean return (last 100): 152.43
+Epsilon: 0.371345
+Episodes: 8100, Step: 127168, mean return (last 100): 151.50
+Episodes: 8110, Step: 127238, mean return (last 100): 148.47
+Episodes: 8120, Step: 127461, mean return (last 100): 150.98
+Episodes: 8130, Step: 127639, mean return (last 100): 151.46
+Episodes: 8150, Step: 127955, mean return (last 100): 155.76
+Epsilon: 0.366395
+Episodes: 8160, Step: 128009, mean return (last 100): 154.81
+Episodes: 8170, Step: 128225, mean return (last 100): 155.76
+Episodes: 8180, Step: 128423, mean return (last 100): 159.33
+Episodes: 8190, Step: 128491, mean return (last 100): 159.06
+Episodes: 8200, Step: 128716, mean return (last 100): 160.87
+Episodes: 8210, Step: 128894, mean return (last 100): 162.34
+Epsilon: 0.361445
+Episodes: 8230, Step: 129210, mean return (last 100): 162.90
+Episodes: 8240, Step: 129264, mean return (last 100): 160.57
+Episodes: 8250, Step: 129480, mean return (last 100): 163.65
+Episodes: 8260, Step: 129678, mean return (last 100): 161.47
+Episodes: 8270, Step: 129746, mean return (last 100): 166.33
+Episodes: 8280, Step: 129971, mean return (last 100): 168.49
+Updating target network.
+Epsilon: 0.356495
+Episodes: 8290, Step: 130149, mean return (last 100): 174.19
+Episodes: 8310, Step: 130465, mean return (last 100): 174.20
+Episodes: 8320, Step: 130519, mean return (last 100): 174.26
+Episodes: 8330, Step: 130735, mean return (last 100): 176.27
+Episodes: 8340, Step: 130933, mean return (last 100): 175.85
+Epsilon: 0.351545
+Episodes: 8350, Step: 131001, mean return (last 100): 176.85
+Episodes: 8360, Step: 131226, mean return (last 100): 182.75
+Episodes: 8370, Step: 131404, mean return (last 100): 182.99
+Episodes: 8390, Step: 131720, mean return (last 100): 182.72
+Episodes: 8400, Step: 131774, mean return (last 100): 181.49
+Episodes: 8410, Step: 131990, mean return (last 100): 187.42
+Epsilon: 0.346595
+Episodes: 8420, Step: 132188, mean return (last 100): 189.05
+Episodes: 8430, Step: 132256, mean return (last 100): 191.41
+Episodes: 8440, Step: 132481, mean return (last 100): 191.87
+Episodes: 8450, Step: 132659, mean return (last 100): 196.43
+Episodes: 8470, Step: 132975, mean return (last 100): 189.45
+Epsilon: 0.341645
+Episodes: 8480, Step: 133029, mean return (last 100): 185.81
+Episodes: 8490, Step: 133242, mean return (last 100): 183.89
+Episodes: 8500, Step: 133443, mean return (last 100): 185.61
+Episodes: 8510, Step: 133501, mean return (last 100): 186.04
+Episodes: 8520, Step: 133736, mean return (last 100): 187.72
+Episodes: 8530, Step: 133914, mean return (last 100): 185.54
+Epsilon: 0.336695
+Episodes: 8540, Step: 134001, mean return (last 100): 182.22
+Episodes: 8550, Step: 134230, mean return (last 100): 178.67
+Episodes: 8560, Step: 134284, mean return (last 100): 179.71
+Episodes: 8570, Step: 134497, mean return (last 100): 182.60
+Episodes: 8580, Step: 134698, mean return (last 100): 191.42
+Episodes: 8590, Step: 134756, mean return (last 100): 193.06
+Episodes: 8600, Step: 134991, mean return (last 100): 190.72
+Updating target network.
+Epsilon: 0.331745
+Episodes: 8610, Step: 135169, mean return (last 100): 189.12
+Episodes: 8620, Step: 135256, mean return (last 100): 189.73
+Episodes: 8630, Step: 135485, mean return (last 100): 188.61
+Episodes: 8640, Step: 135539, mean return (last 100): 194.43
+Episodes: 8650, Step: 135752, mean return (last 100): 197.96
+Episodes: 8660, Step: 135953, mean return (last 100): 203.23
+Epsilon: 0.326795
+Episodes: 8670, Step: 136011, mean return (last 100): 203.30
+Episodes: 8680, Step: 136246, mean return (last 100): 198.36
+Episodes: 8690, Step: 136424, mean return (last 100): 194.03
+Episodes: 8700, Step: 136511, mean return (last 100): 200.02
+Episodes: 8710, Step: 136740, mean return (last 100): 197.63
+Episodes: 8720, Step: 136794, mean return (last 100): 196.71
+Epsilon: 0.321845
+Episodes: 8730, Step: 137007, mean return (last 100): 201.73
+Episodes: 8740, Step: 137208, mean return (last 100): 202.85
+Episodes: 8750, Step: 137266, mean return (last 100): 203.47
+Episodes: 8760, Step: 137501, mean return (last 100): 197.50
+Episodes: 8770, Step: 137679, mean return (last 100): 196.45
+Episodes: 8780, Step: 137766, mean return (last 100): 194.52
+Episodes: 8790, Step: 137995, mean return (last 100): 198.64
+Epsilon: 0.316895
+Episodes: 8800, Step: 138049, mean return (last 100): 197.89
+Episodes: 8810, Step: 138262, mean return (last 100): 198.24
+Episodes: 8820, Step: 138463, mean return (last 100): 196.00
+Episodes: 8830, Step: 138521, mean return (last 100): 195.67
+Episodes: 8840, Step: 138756, mean return (last 100): 193.56
+Episodes: 8850, Step: 138934, mean return (last 100): 193.53
+Epsilon: 0.311945
+Episodes: 8860, Step: 139021, mean return (last 100): 196.99
+Episodes: 8870, Step: 139250, mean return (last 100): 201.44
+Episodes: 8880, Step: 139304, mean return (last 100): 206.23
+Episodes: 8890, Step: 139517, mean return (last 100): 209.66
+Episodes: 8900, Step: 139718, mean return (last 100): 210.51
+Episodes: 8910, Step: 139776, mean return (last 100): 212.84
+Updating target network.
+Epsilon: 0.306995
+Episodes: 8920, Step: 140011, mean return (last 100): 219.10
+Episodes: 8930, Step: 140189, mean return (last 100): 215.73
+Episodes: 8940, Step: 140276, mean return (last 100): 220.55
+Episodes: 8950, Step: 140505, mean return (last 100): 220.61
+Episodes: 8960, Step: 140559, mean return (last 100): 223.33
+Episodes: 8970, Step: 140772, mean return (last 100): 223.22
+Episodes: 8980, Step: 140973, mean return (last 100): 222.58
+Epsilon: 0.302045
+Episodes: 8990, Step: 141031, mean return (last 100): 222.17
+Episodes: 9000, Step: 141266, mean return (last 100): 219.77
+Episodes: 9010, Step: 141444, mean return (last 100): 221.02
+Episodes: 9020, Step: 141531, mean return (last 100): 221.32
+Episodes: 9030, Step: 141760, mean return (last 100): 223.54
+Episodes: 9040, Step: 141814, mean return (last 100): 223.10
+Epsilon: 0.297095
+Episodes: 9050, Step: 142027, mean return (last 100): 223.96
+Episodes: 9060, Step: 142228, mean return (last 100): 222.26
+Episodes: 9070, Step: 142286, mean return (last 100): 222.42
+Episodes: 9080, Step: 142521, mean return (last 100): 226.48
+Episodes: 9090, Step: 142699, mean return (last 100): 228.10
+Episodes: 9100, Step: 142786, mean return (last 100): 232.19
+Epsilon: 0.292145
+Episodes: 9110, Step: 143015, mean return (last 100): 237.45
+Episodes: 9120, Step: 143069, mean return (last 100): 235.63
+Episodes: 9130, Step: 143282, mean return (last 100): 235.16
+Episodes: 9140, Step: 143483, mean return (last 100): 232.56
+Episodes: 9150, Step: 143541, mean return (last 100): 231.59
+Episodes: 9160, Step: 143776, mean return (last 100): 236.04
+Episodes: 9170, Step: 143954, mean return (last 100): 233.55
+Epsilon: 0.287195
+Episodes: 9180, Step: 144041, mean return (last 100): 232.87
+Episodes: 9190, Step: 144270, mean return (last 100): 234.13
+Episodes: 9200, Step: 144324, mean return (last 100): 235.43
+Episodes: 9210, Step: 144537, mean return (last 100): 229.17
+Episodes: 9220, Step: 144738, mean return (last 100): 229.35
+Episodes: 9230, Step: 144796, mean return (last 100): 227.78
+Updating target network.
+Epsilon: 0.282245
+Episodes: 9240, Step: 145031, mean return (last 100): 234.33
+Episodes: 9250, Step: 145209, mean return (last 100): 234.74
+Episodes: 9260, Step: 145296, mean return (last 100): 231.14
+Episodes: 9270, Step: 145525, mean return (last 100): 231.37
+Episodes: 9280, Step: 145579, mean return (last 100): 230.61
+Episodes: 9290, Step: 145792, mean return (last 100): 232.52
+Episodes: 9300, Step: 145993, mean return (last 100): 232.96
+Epsilon: 0.277295
+Episodes: 9310, Step: 146051, mean return (last 100): 232.90
+Episodes: 9320, Step: 146286, mean return (last 100): 231.75
+Episodes: 9330, Step: 146464, mean return (last 100): 235.13
+Episodes: 9340, Step: 146551, mean return (last 100): 229.49
+Episodes: 9350, Step: 146780, mean return (last 100): 233.20
+Episodes: 9360, Step: 146834, mean return (last 100): 231.60
+Epsilon: 0.272345
+Episodes: 9370, Step: 147047, mean return (last 100): 236.29
+Episodes: 9380, Step: 147248, mean return (last 100): 233.90
+Episodes: 9390, Step: 147306, mean return (last 100): 230.81
+Episodes: 9400, Step: 147541, mean return (last 100): 228.53
+Episodes: 9410, Step: 147719, mean return (last 100): 228.06
+Episodes: 9420, Step: 147806, mean return (last 100): 229.62
+Epsilon: 0.267395
+Episodes: 9430, Step: 148035, mean return (last 100): 226.26
+Episodes: 9440, Step: 148089, mean return (last 100): 225.40
+Episodes: 9450, Step: 148302, mean return (last 100): 218.79
+Episodes: 9460, Step: 148503, mean return (last 100): 221.38
+Episodes: 9470, Step: 148561, mean return (last 100): 220.29
+Episodes: 9480, Step: 148796, mean return (last 100): 221.50
+Episodes: 9490, Step: 148974, mean return (last 100): 218.71
+Epsilon: 0.262445
+Episodes: 9500, Step: 149061, mean return (last 100): 220.36
+Episodes: 9510, Step: 149290, mean return (last 100): 224.47
+Episodes: 9520, Step: 149344, mean return (last 100): 227.66
+Episodes: 9530, Step: 149557, mean return (last 100): 227.44
+Episodes: 9540, Step: 149758, mean return (last 100): 227.11
+Episodes: 9550, Step: 149816, mean return (last 100): 230.18
+Updating target network.
+Epsilon: 0.257495
+Episodes: 9560, Step: 150051, mean return (last 100): 231.39
+Episodes: 9570, Step: 150229, mean return (last 100): 233.63
+Episodes: 9580, Step: 150316, mean return (last 100): 238.14
+Episodes: 9590, Step: 150545, mean return (last 100): 239.84
+Episodes: 9600, Step: 150599, mean return (last 100): 240.15
+Episodes: 9610, Step: 150812, mean return (last 100): 240.40
+Epsilon: 0.252545
+Episodes: 9620, Step: 151013, mean return (last 100): 241.78
+Episodes: 9630, Step: 151071, mean return (last 100): 247.45
+Episodes: 9640, Step: 151306, mean return (last 100): 252.44
+Episodes: 9650, Step: 151484, mean return (last 100): 255.93
+Episodes: 9660, Step: 151571, mean return (last 100): 254.05
+Episodes: 9670, Step: 151800, mean return (last 100): 252.62
+Episodes: 9680, Step: 151854, mean return (last 100): 251.79
+Epsilon: 0.247595
+Episodes: 9690, Step: 152067, mean return (last 100): 252.52
+Episodes: 9700, Step: 152268, mean return (last 100): 257.95
+Episodes: 9710, Step: 152326, mean return (last 100): 261.32
+Episodes: 9720, Step: 152561, mean return (last 100): 257.25
+Episodes: 9730, Step: 152739, mean return (last 100): 256.62
+Episodes: 9740, Step: 152826, mean return (last 100): 259.29
+Epsilon: 0.242645
+Episodes: 9750, Step: 153055, mean return (last 100): 261.43
+Episodes: 9760, Step: 153109, mean return (last 100): 263.37
+Episodes: 9770, Step: 153322, mean return (last 100): 262.77
+Episodes: 9780, Step: 153523, mean return (last 100): 265.04
+Episodes: 9790, Step: 153581, mean return (last 100): 267.63
+Episodes: 9800, Step: 153816, mean return (last 100): 264.19
+Episodes: 9810, Step: 153994, mean return (last 100): 261.96
+Epsilon: 0.237695
+Episodes: 9820, Step: 154081, mean return (last 100): 263.11
+Episodes: 9830, Step: 154310, mean return (last 100): 264.03
+Episodes: 9840, Step: 154364, mean return (last 100): 262.39
+Episodes: 9850, Step: 154577, mean return (last 100): 261.84
+Episodes: 9860, Step: 154778, mean return (last 100): 263.74
+Episodes: 9870, Step: 154836, mean return (last 100): 268.74
+Updating target network.
+Epsilon: 0.232745
+Episodes: 9880, Step: 155071, mean return (last 100): 270.60
+Episodes: 9890, Step: 155249, mean return (last 100): 269.40
+Episodes: 9900, Step: 155336, mean return (last 100): 271.99
+Episodes: 9910, Step: 155565, mean return (last 100): 278.34
+Episodes: 9920, Step: 155619, mean return (last 100): 285.95
+Episodes: 9930, Step: 155832, mean return (last 100): 290.64
+Epsilon: 0.227795
+Episodes: 9940, Step: 156033, mean return (last 100): 294.91
+Episodes: 9950, Step: 156091, mean return (last 100): 304.51
+Episodes: 9960, Step: 156326, mean return (last 100): 306.70
+Episodes: 9970, Step: 156504, mean return (last 100): 309.52
+Episodes: 9980, Step: 156591, mean return (last 100): 315.16
+Episodes: 9990, Step: 156820, mean return (last 100): 317.37
+Episodes: 10000, Step: 156874, mean return (last 100): 320.11
+Epsilon: 0.222845
+Episodes: 10010, Step: 157087, mean return (last 100): 320.40
+Episodes: 10020, Step: 157288, mean return (last 100): 322.42
+Episodes: 10030, Step: 157346, mean return (last 100): 323.83
+Episodes: 10040, Step: 157581, mean return (last 100): 319.76
+Episodes: 10050, Step: 157759, mean return (last 100): 316.33
+Episodes: 10060, Step: 157846, mean return (last 100): 316.77
+Epsilon: 0.217895
+Episodes: 10070, Step: 158075, mean return (last 100): 320.33
+Episodes: 10080, Step: 158129, mean return (last 100): 326.25
+Episodes: 10090, Step: 158342, mean return (last 100): 332.93
+Episodes: 10100, Step: 158543, mean return (last 100): 338.38
+Episodes: 10110, Step: 158601, mean return (last 100): 341.22
+Episodes: 10120, Step: 158836, mean return (last 100): 336.36
+Epsilon: 0.212945
+Episodes: 10130, Step: 159014, mean return (last 100): 334.98
+Episodes: 10140, Step: 159101, mean return (last 100): 337.11
+Episodes: 10150, Step: 159330, mean return (last 100): 337.00
+Episodes: 10160, Step: 159384, mean return (last 100): 342.54
+Episodes: 10170, Step: 159597, mean return (last 100): 340.22
+Episodes: 10180, Step: 159798, mean return (last 100): 331.15
+Episodes: 10190, Step: 159856, mean return (last 100): 328.51
+Updating target network.
+Epsilon: 0.207995
+Episodes: 10200, Step: 160091, mean return (last 100): 327.07
+Episodes: 10210, Step: 160269, mean return (last 100): 327.31
+Episodes: 10220, Step: 160356, mean return (last 100): 333.30
+Episodes: 10230, Step: 160585, mean return (last 100): 337.99
+Episodes: 10240, Step: 160639, mean return (last 100): 343.82
+Episodes: 10250, Step: 160852, mean return (last 100): 350.27
+Epsilon: 0.203045
+Episodes: 10260, Step: 161053, mean return (last 100): 348.11
+Episodes: 10270, Step: 161111, mean return (last 100): 349.20
+Episodes: 10280, Step: 161346, mean return (last 100): 352.79
+Episodes: 10290, Step: 161524, mean return (last 100): 356.92
+Episodes: 10300, Step: 161611, mean return (last 100): 353.04
+Episodes: 10310, Step: 161840, mean return (last 100): 353.82
+Episodes: 10320, Step: 161894, mean return (last 100): 355.55
+Epsilon: 0.198095
+Episodes: 10330, Step: 162107, mean return (last 100): 353.44
+Episodes: 10340, Step: 162308, mean return (last 100): 350.62
+Episodes: 10350, Step: 162366, mean return (last 100): 346.18
+Episodes: 10360, Step: 162601, mean return (last 100): 346.18
+Episodes: 10370, Step: 162779, mean return (last 100): 348.93
+Episodes: 10380, Step: 162866, mean return (last 100): 348.04
+Epsilon: 0.193145
+Episodes: 10390, Step: 163095, mean return (last 100): 345.16
+Episodes: 10400, Step: 163149, mean return (last 100): 349.36
+Episodes: 10410, Step: 163362, mean return (last 100): 344.18
+Episodes: 10420, Step: 163563, mean return (last 100): 339.56
+Episodes: 10430, Step: 163621, mean return (last 100): 342.24
+Episodes: 10440, Step: 163856, mean return (last 100): 345.30
+Epsilon: 0.188195
+Episodes: 10450, Step: 164034, mean return (last 100): 345.99
+Episodes: 10460, Step: 164121, mean return (last 100): 352.35
+Episodes: 10470, Step: 164350, mean return (last 100): 350.87
+Episodes: 10480, Step: 164404, mean return (last 100): 348.56
+Episodes: 10490, Step: 164617, mean return (last 100): 359.54
+Episodes: 10500, Step: 164818, mean return (last 100): 361.53
+Episodes: 10510, Step: 164876, mean return (last 100): 366.47
+Updating target network.
+Epsilon: 0.183245
+Episodes: 10520, Step: 165111, mean return (last 100): 366.18
+Episodes: 10530, Step: 165289, mean return (last 100): 370.96
+Episodes: 10540, Step: 165376, mean return (last 100): 375.38
+Episodes: 10550, Step: 165605, mean return (last 100): 374.42
+Episodes: 10560, Step: 165659, mean return (last 100): 368.89
+Episodes: 10570, Step: 165872, mean return (last 100): 369.34
+Epsilon: 0.178295
+Episodes: 10580, Step: 166073, mean return (last 100): 377.00
+Episodes: 10590, Step: 166131, mean return (last 100): 371.31
+Episodes: 10600, Step: 166366, mean return (last 100): 368.22
+Episodes: 10610, Step: 166544, mean return (last 100): 370.49
+Episodes: 10620, Step: 166631, mean return (last 100): 369.15
+Episodes: 10630, Step: 166860, mean return (last 100): 366.29
+Episodes: 10640, Step: 166914, mean return (last 100): 362.28
+Epsilon: 0.173345
+Episodes: 10650, Step: 167127, mean return (last 100): 365.80
+Episodes: 10660, Step: 167328, mean return (last 100): 366.95
+Episodes: 10670, Step: 167386, mean return (last 100): 366.84
+Episodes: 10680, Step: 167621, mean return (last 100): 364.48
+Episodes: 10690, Step: 167799, mean return (last 100): 365.38
+Episodes: 10700, Step: 167886, mean return (last 100): 366.91
+Epsilon: 0.168395
+Episodes: 10710, Step: 168115, mean return (last 100): 369.29
+Episodes: 10720, Step: 168169, mean return (last 100): 378.14
+Episodes: 10730, Step: 168382, mean return (last 100): 375.41
+Episodes: 10740, Step: 168583, mean return (last 100): 382.64
+Episodes: 10750, Step: 168641, mean return (last 100): 385.72
+Episodes: 10760, Step: 168876, mean return (last 100): 384.99
+Epsilon: 0.163445
+Episodes: 10770, Step: 169054, mean return (last 100): 386.23
+Episodes: 10780, Step: 169141, mean return (last 100): 388.93
+Episodes: 10790, Step: 169370, mean return (last 100): 386.98
+Episodes: 10800, Step: 169424, mean return (last 100): 390.00
+Episodes: 10810, Step: 169637, mean return (last 100): 386.82
+Episodes: 10820, Step: 169838, mean return (last 100): 379.49
+Episodes: 10830, Step: 169896, mean return (last 100): 379.93
+Updating target network.
+Epsilon: 0.158495
+Episodes: 10840, Step: 170131, mean return (last 100): 372.67
+Episodes: 10850, Step: 170309, mean return (last 100): 366.63
+Episodes: 10860, Step: 170396, mean return (last 100): 366.82
+Episodes: 10870, Step: 170625, mean return (last 100): 363.35
+Episodes: 10880, Step: 170679, mean return (last 100): 362.44
+Episodes: 10890, Step: 170892, mean return (last 100): 362.91
+Epsilon: 0.153545
+Episodes: 10900, Step: 171093, mean return (last 100): 360.82
+Episodes: 10910, Step: 171151, mean return (last 100): 356.83
+Episodes: 10920, Step: 171386, mean return (last 100): 367.36
+Episodes: 10930, Step: 171564, mean return (last 100): 372.64
+Episodes: 10940, Step: 171651, mean return (last 100): 377.49
+Episodes: 10950, Step: 171880, mean return (last 100): 380.74
+Episodes: 10960, Step: 171934, mean return (last 100): 384.71
+Epsilon: 0.148595
+Episodes: 10970, Step: 172147, mean return (last 100): 388.47
+Episodes: 10980, Step: 172348, mean return (last 100): 384.29
+Episodes: 10990, Step: 172406, mean return (last 100): 384.92
+Episodes: 11000, Step: 172641, mean return (last 100): 385.73
+Episodes: 11010, Step: 172819, mean return (last 100): 392.73
+Episodes: 11020, Step: 172906, mean return (last 100): 390.88
+Epsilon: 0.143645
+Episodes: 11030, Step: 173135, mean return (last 100): 386.55
+Episodes: 11040, Step: 173189, mean return (last 100): 380.58
+Episodes: 11050, Step: 173402, mean return (last 100): 383.04
+Episodes: 11060, Step: 173603, mean return (last 100): 383.15
+Episodes: 11070, Step: 173661, mean return (last 100): 382.89
+Episodes: 11080, Step: 173896, mean return (last 100): 386.39
+Epsilon: 0.138695
+Episodes: 11090, Step: 174074, mean return (last 100): 393.80
+Episodes: 11100, Step: 174161, mean return (last 100): 399.98
+Episodes: 11110, Step: 174390, mean return (last 100): 396.73
+Episodes: 11120, Step: 174444, mean return (last 100): 392.68
+Episodes: 11130, Step: 174657, mean return (last 100): 395.59
+Episodes: 11140, Step: 174858, mean return (last 100): 400.51
+Episodes: 11150, Step: 174916, mean return (last 100): 399.44
+Updating target network.
+Epsilon: 0.133745
+Episodes: 11160, Step: 175151, mean return (last 100): 399.14
+Episodes: 11170, Step: 175329, mean return (last 100): 404.03
+Episodes: 11180, Step: 175416, mean return (last 100): 405.09
+Episodes: 11190, Step: 175645, mean return (last 100): 407.27
+Episodes: 11200, Step: 175699, mean return (last 100): 407.91
+Episodes: 11210, Step: 175912, mean return (last 100): 413.18
+Epsilon: 0.128795
+Episodes: 11220, Step: 176113, mean return (last 100): 419.40
+Episodes: 11230, Step: 176171, mean return (last 100): 423.85
+Episodes: 11240, Step: 176406, mean return (last 100): 422.97
+Episodes: 11250, Step: 176584, mean return (last 100): 422.70
+Episodes: 11260, Step: 176671, mean return (last 100): 429.64
+Episodes: 11270, Step: 176900, mean return (last 100): 433.37
+Episodes: 11280, Step: 176954, mean return (last 100): 435.77
+Epsilon: 0.123845
+Episodes: 11290, Step: 177167, mean return (last 100): 428.38
+Episodes: 11300, Step: 177368, mean return (last 100): 423.99
+Episodes: 11310, Step: 177426, mean return (last 100): 421.56
+Episodes: 11320, Step: 177661, mean return (last 100): 417.00
+Episodes: 11330, Step: 177839, mean return (last 100): 416.31
+Episodes: 11340, Step: 177926, mean return (last 100): 423.97
+Epsilon: 0.118895
+Episodes: 11350, Step: 178155, mean return (last 100): 429.47
+Episodes: 11360, Step: 178209, mean return (last 100): 423.36
+Episodes: 11370, Step: 178422, mean return (last 100): 419.13
+Episodes: 11380, Step: 178623, mean return (last 100): 415.61
+Episodes: 11390, Step: 178681, mean return (last 100): 413.38
+Episodes: 11400, Step: 178916, mean return (last 100): 415.71
+Epsilon: 0.113945
+Episodes: 11410, Step: 179094, mean return (last 100): 419.17
+Episodes: 11420, Step: 179181, mean return (last 100): 424.72
+Episodes: 11430, Step: 179410, mean return (last 100): 430.89
+Episodes: 11440, Step: 179464, mean return (last 100): 421.80
+Episodes: 11450, Step: 179677, mean return (last 100): 412.77
+Episodes: 11460, Step: 179878, mean return (last 100): 413.09
+Episodes: 11470, Step: 179936, mean return (last 100): 412.65
+Updating target network.
+Epsilon: 0.108995
+Episodes: 11480, Step: 180171, mean return (last 100): 410.91
+Episodes: 11490, Step: 180349, mean return (last 100): 413.09
+Episodes: 11500, Step: 180436, mean return (last 100): 415.22
+Episodes: 11510, Step: 180665, mean return (last 100): 408.84
+Episodes: 11520, Step: 180719, mean return (last 100): 412.38
+Episodes: 11530, Step: 180932, mean return (last 100): 409.88
+Epsilon: 0.104045
+Episodes: 11540, Step: 181133, mean return (last 100): 416.59
+Episodes: 11550, Step: 181191, mean return (last 100): 428.66
+Episodes: 11560, Step: 181426, mean return (last 100): 434.07
+Episodes: 11570, Step: 181604, mean return (last 100): 436.91
+Episodes: 11580, Step: 181691, mean return (last 100): 450.37
+Episodes: 11590, Step: 181920, mean return (last 100): 455.17
+Episodes: 11600, Step: 181974, mean return (last 100): 459.76
+Epsilon: 0.099095
+Episodes: 11610, Step: 182187, mean return (last 100): 472.11
+Episodes: 11620, Step: 182388, mean return (last 100): 475.51
+Episodes: 11640, Step: 182674, mean return (last 100): 478.04
+Episodes: 11650, Step: 182859, mean return (last 100): 471.38
+Episodes: 11660, Step: 182943, mean return (last 100): 469.64
+Epsilon: 0.094145
+Episodes: 11670, Step: 183164, mean return (last 100): 475.67
+Episodes: 11680, Step: 183209, mean return (last 100): 472.10
+Episodes: 11690, Step: 183441, mean return (last 100): 477.80
+Episodes: 11700, Step: 183643, mean return (last 100): 479.86
+Episodes: 11720, Step: 183929, mean return (last 100): 479.54
+Epsilon: 0.089195
+Episodes: 11730, Step: 184114, mean return (last 100): 482.31
+Episodes: 11740, Step: 184198, mean return (last 100): 479.21
+Episodes: 11750, Step: 184419, mean return (last 100): 486.25
+Episodes: 11760, Step: 184464, mean return (last 100): 492.00
+Episodes: 11770, Step: 184696, mean return (last 100): 491.18
+Episodes: 11780, Step: 184898, mean return (last 100): 497.69
+Updating target network.
+Epsilon: 0.084245
+Episodes: 11800, Step: 185184, mean return (last 100): 494.60
+Episodes: 11810, Step: 185369, mean return (last 100): 498.53
+Episodes: 11820, Step: 185453, mean return (last 100): 497.31
+Episodes: 11830, Step: 185674, mean return (last 100): 498.95
+Episodes: 11840, Step: 185719, mean return (last 100): 501.90
+Episodes: 11850, Step: 185951, mean return (last 100): 498.55
+Epsilon: 0.079295
+Episodes: 11860, Step: 186153, mean return (last 100): 500.31
+Episodes: 11880, Step: 186439, mean return (last 100): 502.64
+Episodes: 11890, Step: 186624, mean return (last 100): 501.19
+Episodes: 11900, Step: 186708, mean return (last 100): 502.84
+Episodes: 11910, Step: 186929, mean return (last 100): 502.61
+Episodes: 11920, Step: 186974, mean return (last 100): 503.66
+Epsilon: 0.074345
+Episodes: 11930, Step: 187206, mean return (last 100): 507.42
+Episodes: 11940, Step: 187408, mean return (last 100): 507.53
+Episodes: 11960, Step: 187694, mean return (last 100): 507.53
+Episodes: 11970, Step: 187879, mean return (last 100): 508.58
+Episodes: 11980, Step: 187963, mean return (last 100): 504.03
+Epsilon: 0.069395
+Episodes: 11990, Step: 188184, mean return (last 100): 507.62
+Episodes: 12000, Step: 188229, mean return (last 100): 513.39
+Episodes: 12010, Step: 188461, mean return (last 100): 507.37
+Episodes: 12020, Step: 188663, mean return (last 100): 507.14
+Episodes: 12040, Step: 188949, mean return (last 100): 503.57
+Epsilon: 0.064445
+Episodes: 12050, Step: 189134, mean return (last 100): 510.74
+Episodes: 12060, Step: 189218, mean return (last 100): 508.84
+Episodes: 12070, Step: 189439, mean return (last 100): 510.43
+Episodes: 12080, Step: 189484, mean return (last 100): 519.81
+Episodes: 12090, Step: 189716, mean return (last 100): 513.09
+Episodes: 12100, Step: 189918, mean return (last 100): 509.77
+Updating target network.
+Epsilon: 0.059495
+Episodes: 12120, Step: 190204, mean return (last 100): 519.75
+Episodes: 12130, Step: 190389, mean return (last 100): 527.03
+Episodes: 12140, Step: 190473, mean return (last 100): 539.20
+Episodes: 12150, Step: 190694, mean return (last 100): 542.12
+Episodes: 12160, Step: 190739, mean return (last 100): 545.99
+Episodes: 12170, Step: 190971, mean return (last 100): 542.25
+Epsilon: 0.054545
+Episodes: 12180, Step: 191147, mean return (last 100): 546.14
+Episodes: 12200, Step: 191459, mean return (last 100): 558.53
+Episodes: 12210, Step: 191610, mean return (last 100): 564.93
+Episodes: 12220, Step: 191728, mean return (last 100): 566.78
+Episodes: 12230, Step: 191949, mean return (last 100): 560.90
+Episodes: 12240, Step: 191994, mean return (last 100): 561.11
+Epsilon: 0.049595
+Episodes: 12250, Step: 192226, mean return (last 100): 568.21
+Episodes: 12260, Step: 192402, mean return (last 100): 577.49
+Episodes: 12280, Step: 192714, mean return (last 100): 585.65
+Episodes: 12290, Step: 192865, mean return (last 100): 583.82
+Episodes: 12300, Step: 192983, mean return (last 100): 603.97
+Epsilon: 0.044645
+Episodes: 12310, Step: 193204, mean return (last 100): 609.75
+Episodes: 12320, Step: 193249, mean return (last 100): 625.82
+Episodes: 12330, Step: 193481, mean return (last 100): 637.49
+Episodes: 12340, Step: 193657, mean return (last 100): 645.54
+Episodes: 12360, Step: 193969, mean return (last 100): 663.50
+Epsilon: 0.039695
+Episodes: 12370, Step: 194120, mean return (last 100): 674.81
+Episodes: 12380, Step: 194238, mean return (last 100): 677.70
+Episodes: 12390, Step: 194459, mean return (last 100): 693.73
+Episodes: 12400, Step: 194504, mean return (last 100): 693.51
+Episodes: 12410, Step: 194736, mean return (last 100): 697.40
+Episodes: 12420, Step: 194912, mean return (last 100): 698.64
+Updating target network.
+Epsilon: 0.034745
+Episodes: 12440, Step: 195224, mean return (last 100): 713.36
+Episodes: 12450, Step: 195375, mean return (last 100): 707.34
+Episodes: 12460, Step: 195493, mean return (last 100): 709.13
+Episodes: 12470, Step: 195714, mean return (last 100): 712.07
+Episodes: 12480, Step: 195749, mean return (last 100): 730.46
+Episodes: 12490, Step: 195984, mean return (last 100): 730.25
+Epsilon: 0.029795
+Episodes: 12500, Step: 196167, mean return (last 100): 729.83
+Episodes: 12510, Step: 196246, mean return (last 100): 725.90
+Episodes: 12520, Step: 196479, mean return (last 100): 721.57
+Episodes: 12530, Step: 196630, mean return (last 100): 714.81
+Episodes: 12540, Step: 196744, mean return (last 100): 703.68
+Episodes: 12550, Step: 196969, mean return (last 100): 702.94
+Epsilon: 0.024845
+Episodes: 12560, Step: 197004, mean return (last 100): 707.46
+Episodes: 12570, Step: 197236, mean return (last 100): 698.75
+Episodes: 12580, Step: 197422, mean return (last 100): 685.47
+Episodes: 12590, Step: 197501, mean return (last 100): 685.11
+Episodes: 12600, Step: 197734, mean return (last 100): 683.71
+Episodes: 12610, Step: 197885, mean return (last 100): 684.94
+Episodes: 12620, Step: 197997, mean return (last 100): 684.64
+Epsilon: 0.019895
+Episodes: 12630, Step: 198224, mean return (last 100): 690.02
+Episodes: 12640, Step: 198257, mean return (last 100): 683.24
+Episodes: 12650, Step: 198491, mean return (last 100): 678.92
+Episodes: 12660, Step: 198677, mean return (last 100): 670.00
+Episodes: 12670, Step: 198756, mean return (last 100): 672.21
+Episodes: 12680, Step: 198989, mean return (last 100): 657.64
+Epsilon: 0.014945
+Episodes: 12690, Step: 199135, mean return (last 100): 651.67
+Episodes: 12700, Step: 199252, mean return (last 100): 654.32
+Episodes: 12710, Step: 199479, mean return (last 100): 658.95
+Episodes: 12720, Step: 199512, mean return (last 100): 654.18
+Episodes: 12730, Step: 199746, mean return (last 100): 649.87
+Episodes: 12740, Step: 199932, mean return (last 100): 666.06
+Updating target network.
+Epsilon: 0.010000
+Episodes: 12750, Step: 200011, mean return (last 100): 673.63
+Episodes: 12760, Step: 200244, mean return (last 100): 677.80
+Episodes: 12770, Step: 200388, mean return (last 100): 691.37
+Episodes: 12780, Step: 200507, mean return (last 100): 715.37
+Episodes: 12790, Step: 200734, mean return (last 100): 724.28
+Episodes: 12800, Step: 200766, mean return (last 100): 729.75
+Epsilon: 0.010000
+Episodes: 12820, Step: 201187, mean return (last 100): 741.88
+Episodes: 12830, Step: 201259, mean return (last 100): 752.25
+Episodes: 12840, Step: 201487, mean return (last 100): 760.66
+Episodes: 12850, Step: 201643, mean return (last 100): 767.56
+Episodes: 12860, Step: 201756, mean return (last 100): 775.23
+Episodes: 12870, Step: 201979, mean return (last 100): 772.74
+Epsilon: 0.010000
+Episodes: 12880, Step: 202019, mean return (last 100): 773.12
+Episodes: 12890, Step: 202251, mean return (last 100): 768.74
+Episodes: 12900, Step: 202442, mean return (last 100): 770.54
+Episodes: 12910, Step: 202510, mean return (last 100): 779.94
+Episodes: 12920, Step: 202735, mean return (last 100): 769.11
+Episodes: 12930, Step: 202867, mean return (last 100): 766.75
+Epsilon: 0.010000
+Episodes: 12940, Step: 203009, mean return (last 100): 758.43
+Episodes: 12950, Step: 203220, mean return (last 100): 751.37
+Episodes: 12960, Step: 203274, mean return (last 100): 740.28
+Episodes: 12970, Step: 203495, mean return (last 100): 738.42
+Episodes: 12980, Step: 203697, mean return (last 100): 731.95
+Episodes: 12990, Step: 203765, mean return (last 100): 732.76
+Episodes: 13000, Step: 203988, mean return (last 100): 720.94
+Epsilon: 0.010000
+Episodes: 13010, Step: 204117, mean return (last 100): 721.75
+Episodes: 13020, Step: 204264, mean return (last 100): 728.02
+Episodes: 13030, Step: 204475, mean return (last 100): 726.22
+Episodes: 13040, Step: 204529, mean return (last 100): 736.72
+Episodes: 13050, Step: 204745, mean return (last 100): 743.69
+Episodes: 13060, Step: 204943, mean return (last 100): 755.71
+Updating target network.
+Epsilon: 0.010000
+Episodes: 13070, Step: 205020, mean return (last 100): 755.44
+Episodes: 13080, Step: 205243, mean return (last 100): 751.39
+Episodes: 13090, Step: 205372, mean return (last 100): 754.69
+Episodes: 13100, Step: 205515, mean return (last 100): 760.97
+Episodes: 13110, Step: 205730, mean return (last 100): 752.52
+Episodes: 13120, Step: 205781, mean return (last 100): 737.42
+Episodes: 13130, Step: 206000, mean return (last 100): 740.42
+Epsilon: 0.010000
+Episodes: 13140, Step: 206177, mean return (last 100): 737.94
+Episodes: 13150, Step: 206274, mean return (last 100): 740.09
+Episodes: 13160, Step: 206494, mean return (last 100): 737.63
+Episodes: 13170, Step: 206625, mean return (last 100): 743.85
+Episodes: 13180, Step: 206770, mean return (last 100): 751.16
+Episodes: 13190, Step: 206985, mean return (last 100): 749.42
+Epsilon: 0.010000
+Episodes: 13200, Step: 207036, mean return (last 100): 758.62
+Episodes: 13210, Step: 207251, mean return (last 100): 764.79
+Episodes: 13220, Step: 207432, mean return (last 100): 786.03
+Episodes: 13230, Step: 207529, mean return (last 100): 790.63
+Episodes: 13250, Step: 207880, mean return (last 100): 775.79
+Epsilon: 0.010000
+Episodes: 13260, Step: 208025, mean return (last 100): 769.75
+Episodes: 13270, Step: 208240, mean return (last 100): 764.08
+Episodes: 13280, Step: 208291, mean return (last 100): 762.67
+Episodes: 13290, Step: 208502, mean return (last 100): 764.15
+Episodes: 13300, Step: 208671, mean return (last 100): 760.43
+Episodes: 13310, Step: 208780, mean return (last 100): 759.00
+Epsilon: 0.010000
+Episodes: 13330, Step: 209130, mean return (last 100): 751.93
+Episodes: 13340, Step: 209265, mean return (last 100): 752.35
+Episodes: 13350, Step: 209495, mean return (last 100): 767.46
+Episodes: 13360, Step: 209537, mean return (last 100): 774.84
+Episodes: 13370, Step: 209757, mean return (last 100): 768.23
+Episodes: 13380, Step: 209926, mean return (last 100): 773.62
+Updating target network.
+Epsilon: 0.010000
+Episodes: 13390, Step: 210030, mean return (last 100): 771.37
+Episodes: 13410, Step: 210372, mean return (last 100): 774.81
+Episodes: 13420, Step: 210520, mean return (last 100): 777.97
+Episodes: 13430, Step: 210720, mean return (last 100): 783.57
+Episodes: 13440, Step: 210792, mean return (last 100): 785.31
+Epsilon: 0.010000
+Episodes: 13450, Step: 211012, mean return (last 100): 782.50
+Episodes: 13460, Step: 211181, mean return (last 100): 775.79
+Episodes: 13470, Step: 211285, mean return (last 100): 777.85
+Episodes: 13490, Step: 211627, mean return (last 100): 773.75
+Episodes: 13500, Step: 211775, mean return (last 100): 765.53
+Episodes: 13510, Step: 211975, mean return (last 100): 766.18
+Epsilon: 0.010000
+Episodes: 13520, Step: 212047, mean return (last 100): 761.76
+Episodes: 13530, Step: 212267, mean return (last 100): 756.87
+Episodes: 13540, Step: 212436, mean return (last 100): 747.22
+Episodes: 13550, Step: 212540, mean return (last 100): 747.81
+Episodes: 13570, Step: 212882, mean return (last 100): 755.54
+Epsilon: 0.010000
+Episodes: 13580, Step: 213030, mean return (last 100): 755.70
+Episodes: 13590, Step: 213226, mean return (last 100): 760.98
+Episodes: 13600, Step: 213301, mean return (last 100): 773.07
+Episodes: 13610, Step: 213517, mean return (last 100): 763.87
+Episodes: 13620, Step: 213691, mean return (last 100): 758.93
+Episodes: 13630, Step: 213795, mean return (last 100): 758.50
+Episodes: 13640, Step: 213995, mean return (last 100): 755.40
+Epsilon: 0.010000
+Episodes: 13650, Step: 214137, mean return (last 100): 750.98
+Episodes: 13660, Step: 214285, mean return (last 100): 746.34
+Episodes: 13670, Step: 214481, mean return (last 100): 744.49
+Episodes: 13680, Step: 214556, mean return (last 100): 743.86
+Episodes: 13690, Step: 214772, mean return (last 100): 728.34
+Episodes: 13700, Step: 214946, mean return (last 100): 718.89
+Updating target network.
+Epsilon: 0.010000
+Episodes: 13710, Step: 215050, mean return (last 100): 723.07
+Episodes: 13720, Step: 215250, mean return (last 100): 732.36
+Episodes: 13730, Step: 215385, mean return (last 100): 732.59
+Episodes: 13740, Step: 215540, mean return (last 100): 741.27
+Episodes: 13750, Step: 215730, mean return (last 100): 751.80
+Episodes: 13760, Step: 215797, mean return (last 100): 766.41
+Epsilon: 0.010000
+Episodes: 13780, Step: 216201, mean return (last 100): 772.78
+Episodes: 13790, Step: 216297, mean return (last 100): 777.62
+Episodes: 13800, Step: 216491, mean return (last 100): 778.04
+Episodes: 13810, Step: 216640, mean return (last 100): 785.96
+Episodes: 13820, Step: 216791, mean return (last 100): 779.98
+Episodes: 13830, Step: 216962, mean return (last 100): 769.45
+Epsilon: 0.010000
+Episodes: 13840, Step: 217052, mean return (last 100): 756.05
+Episodes: 13850, Step: 217276, mean return (last 100): 737.82
+Episodes: 13860, Step: 217456, mean return (last 100): 730.43
+Episodes: 13870, Step: 217548, mean return (last 100): 729.72
+Episodes: 13880, Step: 217738, mean return (last 100): 716.80
+Episodes: 13890, Step: 217895, mean return (last 100): 712.61
+Epsilon: 0.010000
+Episodes: 13900, Step: 218021, mean return (last 100): 707.20
+Episodes: 13910, Step: 218217, mean return (last 100): 693.24
+Episodes: 13920, Step: 218306, mean return (last 100): 691.73
+Episodes: 13930, Step: 218499, mean return (last 100): 696.24
+Episodes: 13940, Step: 218711, mean return (last 100): 705.53
+Episodes: 13950, Step: 218799, mean return (last 100): 708.40
+Episodes: 13960, Step: 218993, mean return (last 100): 699.30
+Epsilon: 0.010000
+Episodes: 13970, Step: 219150, mean return (last 100): 701.12
+Episodes: 13980, Step: 219276, mean return (last 100): 697.96
+Episodes: 13990, Step: 219472, mean return (last 100): 702.07
+Episodes: 14000, Step: 219561, mean return (last 100): 689.13
+Episodes: 14010, Step: 219754, mean return (last 100): 694.32
+Episodes: 14020, Step: 219936, mean return (last 100): 698.30
+Updating target network.
+Epsilon: 0.010000
+Episodes: 14030, Step: 220054, mean return (last 100): 690.44
+Episodes: 14040, Step: 220248, mean return (last 100): 683.05
+Episodes: 14050, Step: 220405, mean return (last 100): 674.54
+Episodes: 14060, Step: 220518, mean return (last 100): 685.61
+Episodes: 14070, Step: 220719, mean return (last 100): 683.77
+Episodes: 14080, Step: 220816, mean return (last 100): 682.78
+Epsilon: 0.010000
+Episodes: 14090, Step: 221007, mean return (last 100): 692.04
+Episodes: 14100, Step: 221191, mean return (last 100): 711.34
+Episodes: 14110, Step: 221302, mean return (last 100): 712.05
+Episodes: 14130, Step: 221642, mean return (last 100): 731.84
+Episodes: 14140, Step: 221773, mean return (last 100): 743.67
+Episodes: 14150, Step: 221973, mean return (last 100): 765.47
+Epsilon: 0.010000
+Episodes: 14160, Step: 222071, mean return (last 100): 763.14
+Episodes: 14180, Step: 222433, mean return (last 100): 776.28
+Episodes: 14190, Step: 222526, mean return (last 100): 771.40
+Episodes: 14200, Step: 222749, mean return (last 100): 772.90
+Episodes: 14210, Step: 222897, mean return (last 100): 779.23
+Epsilon: 0.010000
+Episodes: 14220, Step: 223009, mean return (last 100): 773.74
+Episodes: 14230, Step: 223215, mean return (last 100): 763.76
+Episodes: 14240, Step: 223326, mean return (last 100): 759.16
+Episodes: 14250, Step: 223502, mean return (last 100): 751.35
+Episodes: 14260, Step: 223688, mean return (last 100): 752.85
+Episodes: 14270, Step: 223781, mean return (last 100): 746.12
+Episodes: 14280, Step: 223988, mean return (last 100): 758.78
+Epsilon: 0.010000
+Episodes: 14290, Step: 224120, mean return (last 100): 756.60
+Episodes: 14300, Step: 224262, mean return (last 100): 751.92
+Episodes: 14310, Step: 224470, mean return (last 100): 753.21
+Episodes: 14320, Step: 224534, mean return (last 100): 765.20
+Episodes: 14330, Step: 224757, mean return (last 100): 764.78
+Episodes: 14340, Step: 224936, mean return (last 100): 775.33
+Updating target network.
+Epsilon: 0.010000
+Episodes: 14350, Step: 225025, mean return (last 100): 777.02
+Episodes: 14360, Step: 225223, mean return (last 100): 778.28
+Episodes: 14370, Step: 225365, mean return (last 100): 788.21
+Episodes: 14380, Step: 225494, mean return (last 100): 785.11
+Episodes: 14390, Step: 225689, mean return (last 100): 799.25
+Episodes: 14400, Step: 225785, mean return (last 100): 804.65
+Episodes: 14410, Step: 225976, mean return (last 100): 805.94
+Epsilon: 0.010000
+Episodes: 14420, Step: 226102, mean return (last 100): 811.85
+Episodes: 14430, Step: 226234, mean return (last 100): 825.54
+Episodes: 14440, Step: 226431, mean return (last 100): 831.06
+Episodes: 14450, Step: 226554, mean return (last 100): 832.08
+Episodes: 14460, Step: 226709, mean return (last 100): 827.46
+Episodes: 14470, Step: 226880, mean return (last 100): 826.50
+Episodes: 14480, Step: 226991, mean return (last 100): 834.12
+Epsilon: 0.010000
+Episodes: 14490, Step: 227183, mean return (last 100): 829.10
+Episodes: 14500, Step: 227307, mean return (last 100): 835.71
+Episodes: 14510, Step: 227446, mean return (last 100): 837.23
+Episodes: 14520, Step: 227649, mean return (last 100): 826.70
+Episodes: 14530, Step: 227769, mean return (last 100): 827.27
+Episodes: 14540, Step: 227928, mean return (last 100): 822.78
+Epsilon: 0.010000
+Episodes: 14550, Step: 228125, mean return (last 100): 817.89
+Episodes: 14560, Step: 228225, mean return (last 100): 822.99
+Episodes: 14570, Step: 228391, mean return (last 100): 829.54
+Episodes: 14580, Step: 228519, mean return (last 100): 828.43
+Episodes: 14590, Step: 228661, mean return (last 100): 835.46
+Episodes: 14600, Step: 228846, mean return (last 100): 832.39
+Episodes: 14610, Step: 228997, mean return (last 100): 833.83
+Epsilon: 0.010000
+Episodes: 14630, Step: 229303, mean return (last 100): 839.12
+Episodes: 14640, Step: 229414, mean return (last 100): 838.83
+Episodes: 14650, Step: 229599, mean return (last 100): 849.92
+Episodes: 14660, Step: 229724, mean return (last 100): 852.90
+Updating target network.
+Epsilon: 0.010000
+Episodes: 14680, Step: 230052, mean return (last 100): 849.63
+Episodes: 14690, Step: 230178, mean return (last 100): 843.93
+Episodes: 14710, Step: 230519, mean return (last 100): 836.76
+Episodes: 14720, Step: 230650, mean return (last 100): 839.55
+Episodes: 14730, Step: 230809, mean return (last 100): 834.49
+Episodes: 14740, Step: 230928, mean return (last 100): 834.18
+Epsilon: 0.010000
+Episodes: 14750, Step: 231101, mean return (last 100): 836.16
+Episodes: 14760, Step: 231256, mean return (last 100): 843.34
+Episodes: 14780, Step: 231558, mean return (last 100): 837.40
+Episodes: 14790, Step: 231703, mean return (last 100): 834.52
+Episodes: 14800, Step: 231835, mean return (last 100): 841.13
+Epsilon: 0.010000
+Episodes: 14810, Step: 232033, mean return (last 100): 841.85
+Episodes: 14820, Step: 232160, mean return (last 100): 842.91
+Episodes: 14830, Step: 232304, mean return (last 100): 850.05
+Episodes: 14840, Step: 232462, mean return (last 100): 851.40
+Episodes: 14850, Step: 232635, mean return (last 100): 849.61
+Episodes: 14860, Step: 232782, mean return (last 100): 843.00
+Episodes: 14870, Step: 232927, mean return (last 100): 850.47
+Epsilon: 0.010000
+Episodes: 14880, Step: 233057, mean return (last 100): 851.11
+Episodes: 14890, Step: 233215, mean return (last 100): 851.27
+Episodes: 14900, Step: 233348, mean return (last 100): 852.34
+Episodes: 14910, Step: 233510, mean return (last 100): 855.89
+Episodes: 14920, Step: 233654, mean return (last 100): 851.74
+Episodes: 14930, Step: 233821, mean return (last 100): 853.01
+Episodes: 14940, Step: 233940, mean return (last 100): 852.49
+Epsilon: 0.010000
+Episodes: 14950, Step: 234094, mean return (last 100): 855.86
+Episodes: 14960, Step: 234271, mean return (last 100): 863.05
+Episodes: 14970, Step: 234397, mean return (last 100): 854.58
+Episodes: 14980, Step: 234529, mean return (last 100): 854.40
+Episodes: 14990, Step: 234702, mean return (last 100): 855.14
+Episodes: 15000, Step: 234825, mean return (last 100): 860.21
+Updating target network.
+Epsilon: 0.010000
+Episodes: 15010, Step: 235009, mean return (last 100): 854.12
+Episodes: 15020, Step: 235146, mean return (last 100): 851.61
+Episodes: 15030, Step: 235275, mean return (last 100): 850.20
+Episodes: 15040, Step: 235463, mean return (last 100): 853.97
+Episodes: 15050, Step: 235578, mean return (last 100): 853.44
+Episodes: 15060, Step: 235758, mean return (last 100): 853.16
+Episodes: 15070, Step: 235899, mean return (last 100): 860.43
+Epsilon: 0.010000
+Episodes: 15080, Step: 236024, mean return (last 100): 860.93
+Episodes: 15090, Step: 236185, mean return (last 100): 867.54
+Episodes: 15100, Step: 236331, mean return (last 100): 864.47
+Episodes: 15110, Step: 236476, mean return (last 100): 862.00
+Episodes: 15120, Step: 236656, mean return (last 100): 869.74
+Episodes: 15130, Step: 236771, mean return (last 100): 869.44
+Episodes: 15140, Step: 236943, mean return (last 100): 864.59
+Epsilon: 0.010000
+Episodes: 15150, Step: 237050, mean return (last 100): 867.78
+Episodes: 15160, Step: 237221, mean return (last 100): 860.64
+Episodes: 15170, Step: 237391, mean return (last 100): 861.19
+Episodes: 15180, Step: 237492, mean return (last 100): 861.45
+Episodes: 15190, Step: 237679, mean return (last 100): 861.76
+Episodes: 15200, Step: 237816, mean return (last 100): 864.06
+Episodes: 15210, Step: 237963, mean return (last 100): 868.84
+Epsilon: 0.010000
+Episodes: 15220, Step: 238125, mean return (last 100): 866.68
+Episodes: 15230, Step: 238247, mean return (last 100): 862.17
+Episodes: 15240, Step: 238435, mean return (last 100): 861.38
+Episodes: 15250, Step: 238569, mean return (last 100): 858.22
+Episodes: 15260, Step: 238716, mean return (last 100): 861.07
+Episodes: 15270, Step: 238878, mean return (last 100): 852.29
+Epsilon: 0.010000
+Episodes: 15280, Step: 239030, mean return (last 100): 850.86
+Episodes: 15290, Step: 239165, mean return (last 100): 850.33
+Episodes: 15300, Step: 239330, mean return (last 100): 847.82
+Episodes: 15310, Step: 239480, mean return (last 100): 845.44
+Episodes: 15320, Step: 239631, mean return (last 100): 845.69
+Episodes: 15330, Step: 239774, mean return (last 100): 850.96
+Episodes: 15340, Step: 239929, mean return (last 100): 853.23
+Updating target network.
+Epsilon: 0.010000
+Episodes: 15350, Step: 240089, mean return (last 100): 855.81
+Episodes: 15360, Step: 240207, mean return (last 100): 856.04
+Episodes: 15370, Step: 240391, mean return (last 100): 861.38
+Episodes: 15380, Step: 240540, mean return (last 100): 863.31
+Episodes: 15390, Step: 240671, mean return (last 100): 853.33
+Episodes: 15400, Step: 240852, mean return (last 100): 856.83
+Epsilon: 0.010000
+Episodes: 15410, Step: 241010, mean return (last 100): 859.31
+Episodes: 15420, Step: 241146, mean return (last 100): 859.61
+Episodes: 15430, Step: 241293, mean return (last 100): 857.24
+Episodes: 15440, Step: 241435, mean return (last 100): 857.11
+Episodes: 15450, Step: 241605, mean return (last 100): 853.62
+Episodes: 15460, Step: 241769, mean return (last 100): 855.68
+Episodes: 15470, Step: 241905, mean return (last 100): 855.37
+Epsilon: 0.010000
+Episodes: 15480, Step: 242094, mean return (last 100): 849.05
+Episodes: 15490, Step: 242211, mean return (last 100): 850.40
+Episodes: 15500, Step: 242378, mean return (last 100): 843.79
+Episodes: 15510, Step: 242545, mean return (last 100): 845.40
+Episodes: 15520, Step: 242650, mean return (last 100): 845.71
+Episodes: 15530, Step: 242847, mean return (last 100): 842.19
+Episodes: 15540, Step: 242982, mean return (last 100): 843.09
+Epsilon: 0.010000
+Episodes: 15550, Step: 243133, mean return (last 100): 845.09
+Episodes: 15560, Step: 243316, mean return (last 100): 844.70
+Episodes: 15570, Step: 243432, mean return (last 100): 846.69
+Episodes: 15580, Step: 243600, mean return (last 100): 848.92
+Episodes: 15590, Step: 243758, mean return (last 100): 846.12
+Episodes: 15600, Step: 243905, mean return (last 100): 850.79
+Epsilon: 0.010000
+Episodes: 15610, Step: 244069, mean return (last 100): 850.71
+Episodes: 15620, Step: 244210, mean return (last 100): 850.43
+Episodes: 15630, Step: 244358, mean return (last 100): 852.38

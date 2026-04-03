@@ -1,0 +1,11 @@
+Episode 10, mean 100-episode return -1713.96 +-157.00, returns -1712.27 -1533.49 -1751.46 -1989.3 -1563.13 -1869.3 -1842.33 -1445.02 -1694.15 -1739.12
+Traceback (most recent call last):
+  File "/lnet/aic/personal/babkavi/npfl139/labs/06/paac.py", line 221, in <module>
+    main(main_env, main_args)
+  File "/lnet/aic/personal/babkavi/npfl139/labs/06/paac.py", line 200, in main
+    if returns.mean() >= args.reward_threshold:
+       ^^^^^^^^^^^^
+AttributeError: 'list' object has no attribute 'mean'
+slurmstepd: error: common_file_write_uint32s: write pid 2052393 to /sys/fs/cgroup/cgroup.procs failed: Device or resource busy
+slurmstepd: error: Unable to move pid 2052393 to init root cgroup /sys/fs/cgroup
+slurmstepd: error: error unlocking cgroup '/sys/fs/cgroup/system.slice/slurmstepd.scope' : Bad file descriptor

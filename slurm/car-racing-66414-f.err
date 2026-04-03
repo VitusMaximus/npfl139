@@ -1,0 +1,5 @@
+/var/spool/slurmd/job66414/slurm_script: line 30: 1477922 Killed                  python labs/04/car_racing.py --threads "${SLURM_CPUS_PER_TASK:-8}" --num_envs 16 --batch_size 64 "$@"
+slurmstepd: error: Detected 1 oom-kill event(s) in StepId=66414.batch. Some of your processes may have been killed by the cgroup out-of-memory handler.
+slurmstepd: error: common_file_write_uint32s: write pid 1477899 to /sys/fs/cgroup/cgroup.procs failed: Device or resource busy
+slurmstepd: error: Unable to move pid 1477899 to init root cgroup /sys/fs/cgroup
+slurmstepd: error: error unlocking cgroup '/sys/fs/cgroup/system.slice/slurmstepd.scope' : Bad file descriptor

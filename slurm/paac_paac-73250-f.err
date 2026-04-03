@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/lnet/aic/personal/babkavi/npfl139/labs/06/paac.py", line 9, in <module>
+    npfl139.require_version("2526.6")
+  File "/lnet/aic/personal/babkavi/npfl139/VENV_DIR/lib/python3.11/site-packages/npfl139/version.py", line 26, in require_version
+    assert current[:len(required)] >= required, (
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: The npfl139>=2526.6 is required, but found only 2526.4.0.
+Please update the npfl139 package by running either:
+- `VENV_DIR/bin/pip install --upgrade npfl139` when using a venv, or
+- `python3 -m pip install --user --upgrade npfl139` otherwise.
+slurmstepd: error: common_file_write_uint32s: write pid 2659738 to /sys/fs/cgroup/cgroup.procs failed: Device or resource busy
+slurmstepd: error: Unable to move pid 2659738 to init root cgroup /sys/fs/cgroup
+slurmstepd: error: error unlocking cgroup '/sys/fs/cgroup/system.slice/slurmstepd.scope' : Bad file descriptor
