@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# f5419161-0138-4909-8252-ba9794a63e53
+# 4b50a6fb-a4a6-4b30-9879-0b671f941a72
 import argparse
 
 import gymnasium as gym
@@ -10,16 +12,17 @@ npfl139.require_version("2526.6")
 
 parser = argparse.ArgumentParser()
 # These arguments will be set appropriately by ReCodEx, even if you change them.
-parser.add_argument("--recodex", default=False, action="store_true", help="Running in ReCodEx")
+parser.add_argument("--recodex", default=True, action="store_true", help="Running in ReCodEx")
 parser.add_argument("--render_each", default=0, type=int, help="Render some episodes.")
-parser.add_argument("--seed", default=None, type=int, help="Random seed.")
-parser.add_argument("--threads", default=1, type=int, help="Maximum number of threads to use.")
+parser.add_argument("--seed", default=42, type=int, help="Random seed.")
+parser.add_argument("--threads", default=16, type=int, help="Maximum number of threads to use.")
 # For these and any other arguments you add, ReCodEx will keep your default value.
-parser.add_argument("--batch_size", default=..., type=int, help="Batch size.")
-parser.add_argument("--episodes", default=..., type=int, help="Training episodes.")
-parser.add_argument("--gamma", default=..., type=float, help="Discounting factor.")
-parser.add_argument("--hidden_layer_size", default=..., type=int, help="Size of hidden layer.")
-parser.add_argument("--learning_rate", default=..., type=float, help="Learning rate.")
+parser.add_argument("--batch_size", default=1, type=int, help="Batch size.")
+parser.add_argument("--episodes", default=200, type=int, help="Training episodes.")
+parser.add_argument("--gamma", default=1, type=float, help="Discounting factor.")
+parser.add_argument("--hidden_layer_size", default=32, type=int, help="Size of hidden layer.")
+parser.add_argument("--learning_rate", default=2**(-8), type=float, help="Learning rate.")
+parser.add_argument("--value_learning_rate", default=2**(-5), type=float, help="Learning rate.")
 
 
 class Agent:
@@ -40,7 +43,28 @@ class Agent:
         #
         # Using Adam optimizer with given `args.learning_rate` for both models
         # is a good default.
-        raise NotImplementedError()
+
+        self._policy = torch.nn.Sequential(
+            torch.nn.Linear(env.observation_space.shape[0], args.hidden_layer_size),
+            torch.nn.ReLU(),
+            torch.nn.Linear(args.hidden_layer_size, env.action_space.n),
+        ).to(self.device)
+        
+        self._value = torch.nn.Sequential(
+            torch.nn.Linear(env.observation_space.shape[0], args.hidden_layer_size),
+            torch.nn.ReLU(),
+            torch.nn.Linear(args.hidden_layer_size, 1),
+        ).to(self.device)
+
+        # TODO: Define an optimizer. Using `torch.optim.Adam` optimizer with
+        # the given `args.learning_rate` is a good default.
+        self._optimizer_policy = torch.optim.Adam(self._policy.parameters(), args.learning_rate)
+        self._optimizer_value = torch.optim.Adam(self._value.parameters(), args.value_learning_rate)
+        self.gamma = args.gamma
+
+        # TODO: Define the loss (most likely some `torch.nn.*Loss`).
+        self._loss = torch.nn.CrossEntropyLoss(reduction="none")
+        self._value_loss = torch.nn.MSELoss(reduction="none")
 
     # The `npfl139.typed_torch_function` automatically converts input arguments
     # to PyTorch tensors of given type, and converts the result to a NumPy array.
@@ -53,12 +77,25 @@ class Agent:
         # - train the policy model, using `returns - predicted_baseline` as
         #   advantage estimate
         # - train the baseline model to predict `returns`
-        raise NotImplementedError()
+        self._optimizer_value.zero_grad()
+        value_pred = self._value(states).squeeze(-1)
+        loss_value = self._value_loss(value_pred, returns).mean()
+        loss_value.backward()
+        self._optimizer_value.step()
+
+        self._optimizer_policy.zero_grad()
+        delta = (returns - value_pred.detach())
+        loss_raw = self._loss(self._policy(states), actions)
+        loss = (delta * loss_raw).mean()
+        loss.backward()
+        self._optimizer_policy.step()
+        
 
     @npfl139.typed_torch_function(device, torch.float32)
     def predict(self, states: torch.Tensor) -> np.ndarray:
         # TODO: Define the prediction method returning policy probabilities.
-        raise NotImplementedError()
+        with torch.no_grad():
+            return torch.nn.functional.softmax(self._policy(states), dim=-1).cpu().numpy()
 
 
 def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
@@ -68,6 +105,7 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
 
     # Construct the agent.
     agent = Agent(env, args)
+    gamma = args.gamma
 
     # Training
     for _ in range(args.episodes // args.batch_size):
@@ -80,7 +118,8 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
                 # TODO(reinforce): Choose `action` according to probabilities
                 # distribution (see `np.random.choice`), which you
                 # can compute using `agent.predict` and current `state`.
-                action = ...
+                action = np.random.choice(env.action_space.n, size=1, p=agent.predict(state).flatten())
+                action = action[0]
 
                 next_state, reward, terminated, truncated, _ = env.step(action)
                 done = terminated or truncated
@@ -91,21 +130,25 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
 
                 state = next_state
 
-            # TODO(reinforce): Compute returns by summing rewards (with discounting)
-            ...
+            returns = np.zeros(len(rewards), dtype=np.float32)
+            returns[-1] = rewards[-1]
+            for t in range(len(rewards)-2,-1,-1):
+                returns[t] = rewards[t] + gamma * returns[t+1]
 
-            # TODO(reinforce): Add states, actions and returns to the training batch
-            ...
+            # TODO: Add states, actions and returns to the training batch
+            batch_states.extend(states)
+            batch_actions.extend(actions)
+            batch_returns.extend(returns)
 
-        # TODO(reinforce): Train using the generated batch.
-        ...
+        # TODO: Train using the generated batch.
+        agent.train(batch_states, batch_actions, batch_returns)
 
     # Final evaluation
     while True:
         state, done = env.reset(start_evaluation=True)[0], False
         while not done:
             # TODO(reinforce): Choose a greedy action.
-            action = ...
+            action = np.argmax(agent.predict(state))
             state, reward, terminated, truncated, _ = env.step(action)
             done = terminated or truncated
 
