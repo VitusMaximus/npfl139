@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# f5419161-0138-4909-8252-ba9794a63e53
+# 4b50a6fb-a4a6-4b30-9879-0b671f941a72
 import argparse
 import collections
 import copy
@@ -12,9 +14,9 @@ npfl139.require_version("2526.7")
 
 parser = argparse.ArgumentParser()
 # These arguments will be set appropriately by ReCodEx, even if you change them.
-parser.add_argument("--env", default="Pendulum-v1", type=str, help="Environment.")
+parser.add_argument("--env", default="InvertedDoublePendulum-v5", type=str, help="Environment.")
 parser.add_argument("--recodex", default=False, action="store_true", help="Running in ReCodEx")
-parser.add_argument("--render_each", default=0, type=int, help="Render some episodes.")
+parser.add_argument("--render_each", default=100, type=int, help="Render some episodes.")
 parser.add_argument("--seed", default=None, type=int, help="Random seed.")
 parser.add_argument("--threads", default=1, type=int, help="Maximum number of threads to use.")
 # For these and any other arguments you add, ReCodEx will keep your default value.
@@ -28,6 +30,8 @@ parser.add_argument("--noise_sigma", default=0.2, type=float, help="UB noise sig
 parser.add_argument("--noise_theta", default=0.15, type=float, help="UB noise theta.")
 parser.add_argument("--replay_buffer_size", default=100_000, type=int, help="Replay buffer size")
 parser.add_argument("--target_tau", default=0.005, type=float, help="Target network update weight.")
+parser.add_argument("--episodes_double", default=1100, type=int, help="Number of episodes to train.")
+parser.add_argument("--episodes_single", default=100, type=int, help="Number of episodes to train.")
 
 
 class Actor(torch.nn.Module):
@@ -198,9 +202,16 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
 
     noise = OrnsteinUhlenbeckNoise(env.action_space.shape[0], 0, args.noise_theta, args.noise_sigma)
     training = True
+    episodes = 0
     while training:
         # Training
         for _ in range(args.evaluate_each):
+            episodes += 1
+            if args.env == "Pendulum-v1" and episodes >= args.episodes_single:
+                training = False
+            elif args.env == "InvertedDoublePendulum-v5" and episodes >= args.episodes_double:
+                training = False
+
             state, done = env.reset()[0], False
             noise.reset()
             while not done:
