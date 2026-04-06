@@ -18,16 +18,53 @@ parser.add_argument("--render_each", default=0, type=int, help="Render some epis
 parser.add_argument("--seed", default=None, type=int, help="Random seed.")
 parser.add_argument("--threads", default=1, type=int, help="Maximum number of threads to use.")
 # For these and any other arguments you add, ReCodEx will keep your default value.
-parser.add_argument("--batch_size", default=..., type=int, help="Batch size.")
+parser.add_argument("--batch_size", default=64, type=int, help="Batch size.")
 parser.add_argument("--evaluate_each", default=50, type=int, help="Evaluate each number of episodes.")
 parser.add_argument("--evaluate_for", default=50, type=int, help="Evaluate the given number of episodes.")
-parser.add_argument("--gamma", default=..., type=float, help="Discounting factor.")
-parser.add_argument("--hidden_layer_size", default=..., type=int, help="Size of hidden layer.")
-parser.add_argument("--learning_rate", default=..., type=float, help="Learning rate.")
+parser.add_argument("--gamma", default=0.99, type=float, help="Discounting factor.")
+parser.add_argument("--hidden_layer_size", default=64, type=int, help="Size of hidden layer.")
+parser.add_argument("--learning_rate", default=1e-3, type=float, help="Learning rate.")
 parser.add_argument("--noise_sigma", default=0.2, type=float, help="UB noise sigma.")
 parser.add_argument("--noise_theta", default=0.15, type=float, help="UB noise theta.")
 parser.add_argument("--replay_buffer_size", default=100_000, type=int, help="Replay buffer size")
-parser.add_argument("--target_tau", default=..., type=float, help="Target network update weight.")
+parser.add_argument("--target_tau", default=0.005, type=float, help="Target network update weight.")
+
+
+class Actor(torch.nn.Module):
+    def __init__(self, env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
+        super().__init__()
+        
+        self.register_buffer("_action_low", torch.from_numpy(env.action_space.low))
+        self.register_buffer("_action_high", torch.from_numpy(env.action_space.high))
+
+        self._model = torch.nn.Sequential(
+            torch.nn.Linear(env.observation_space.shape[0], args.hidden_layer_size),
+            torch.nn.ReLU(),
+            torch.nn.Linear(args.hidden_layer_size, env.action_space.shape[0]),
+            torch.nn.Tanh(),
+        )
+
+    def forward(self, states: torch.Tensor) -> torch.Tensor:
+        actions = self._model(states)
+        return actions * (self._action_high - self._action_low) / 2.0 + (self._action_high + self._action_low) / 2.0
+
+
+class Critic(torch.nn.Module):
+    def __init__(self, env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
+        super().__init__()
+
+        self._model = torch.nn.Sequential(
+            torch.nn.Linear(env.observation_space.shape[0] + env.action_space.shape[0], args.hidden_layer_size),
+            torch.nn.ReLU(),
+            torch.nn.Linear(args.hidden_layer_size, args.hidden_layer_size),
+            torch.nn.ReLU(),
+            torch.nn.Linear(args.hidden_layer_size, 1),
+        )
+
+    def forward(self, states: torch.Tensor, actions: torch.Tensor) -> torch.Tensor:
+        input = torch.cat([states, actions], dim=1)
+        return self._model(input).squeeze(1)
+
 
 
 class Agent:
@@ -48,7 +85,18 @@ class Agent:
         #   two more hidden layers, before computing the returns with the last output layer.
         #
         # - A target critic as the copy of the critic using `copy.deepcopy`.
-        raise NotImplementedError()
+        self._args = args
+        
+        self._actor = Actor(env, args).to(self.device)
+        self._target_actor = copy.deepcopy(self._actor).to(self.device)
+
+        self._critic = Critic(env, args).to(self.device)
+        self._target_critic = copy.deepcopy(self._critic).to(self.device)
+
+        self._actor_optimizer = torch.optim.Adam(self._actor.parameters(), lr=args.learning_rate)
+        self._critic_optimizer = torch.optim.Adam(self._critic.parameters(), lr=args.learning_rate)
+
+        self._critic_loss = torch.nn.MSELoss()
 
     # The `npfl139.typed_torch_function` automatically converts input arguments
     # to PyTorch tensors of given type, and converts the result to a NumPy array.
@@ -61,18 +109,51 @@ class Agent:
         # Furthermore, update the target actor and critic networks by exponential moving average
         # with momentum `args.target_tau`. An implementation for EMA update is provided as
         #   npfl139.update_params_by_ema(target: torch.nn.Module, source: torch.nn.Module, tau: float)
-        raise NotImplementedError()
+        
+        self._critic.train()
+        self._actor.train()
+
+        self._critic_optimizer.zero_grad()
+        self._actor_optimizer.zero_grad()
+
+        critic_values: torch.Tensor = self._critic(states, actions)
+        critic_loss: torch.Tensor = self._critic_loss(critic_values, returns)
+        critic_loss.backward()
+        self._critic_optimizer.step()
+
+        self._critic.requires_grad_(False)
+
+        predicted_actions: torch.Tensor = self._actor(states)
+        actor_loss: torch.Tensor = -self._critic(states, predicted_actions).mean()
+        actor_loss.backward()
+        self._actor_optimizer.step()
+
+        self._critic.requires_grad_(True)
+
+
+        npfl139.update_params_by_ema(self._target_actor, self._actor, self._args.target_tau)
+        npfl139.update_params_by_ema(self._target_critic, self._critic, self._args.target_tau)
+
+
 
     @npfl139.typed_torch_function(device, torch.float32)
     def predict_actions(self, states: torch.Tensor) -> np.ndarray:
         # TODO: Return predicted actions by the actor.
-        raise NotImplementedError()
+        self._actor.eval()
+        with torch.inference_mode():
+            actions = self._actor(states)
+        return actions.cpu()
 
     @npfl139.typed_torch_function(device, torch.float32)
     def predict_values(self, states: torch.Tensor) -> np.ndarray:
         # TODO: Return predicted returns -- predict actions by the target actor
         # and evaluate them using the target critic.
-        raise NotImplementedError()
+        self._target_actor.eval()
+        self._target_critic.eval()
+        with torch.inference_mode():
+            actions = self._target_actor(states)
+            values = self._target_critic(states, actions)
+        return values.cpu()
 
 
 class OrnsteinUhlenbeckNoise:
@@ -109,7 +190,7 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
         rewards, done = 0, False
         while not done:
             # TODO: Predict an action by calling `agent.predict_actions`.
-            action = ...
+            action = agent.predict_actions(state[None])[0]
             state, reward, terminated, truncated, _ = env.step(action)
             done = terminated or truncated
             rewards += reward
@@ -126,7 +207,9 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
                 # TODO: Predict actions by calling `agent.predict_actions`
                 # and adding the Ornstein-Uhlenbeck noise. As in paac_continuous,
                 # clip the actions to the `env.action_space.{low,high}` range.
-                action = ...
+                action = agent.predict_actions(state[None])[0]
+                action += noise.sample()
+                action = np.clip(action, env.action_space.low, env.action_space.high)
 
                 next_state, reward, terminated, truncated, _ = env.step(action)
                 done = terminated or truncated
@@ -137,7 +220,10 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
                     continue
                 states, actions, rewards, dones, next_states = replay_buffer.sample(args.batch_size)
                 # TODO: Perform the training
-                ...
+
+                next_values = agent.predict_values(next_states)
+                returns = rewards + args.gamma * next_values * (1 - dones)
+                agent.train(states, actions, returns)
 
         # Periodic evaluation
         returns = [evaluate_episode(logging=False) for _ in range(args.evaluate_for)]
