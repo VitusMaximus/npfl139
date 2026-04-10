@@ -14,21 +14,22 @@ npfl139.require_version("2526.7")
 
 parser = argparse.ArgumentParser()
 # These arguments will be set appropriately by ReCodEx, even if you change them.
-parser.add_argument("--env", default="InvertedDoublePendulum-v5", type=str, help="Environment.")
+parser.add_argument("--env", default="BipedalWalker-v3", type=str, help="Environment.")
+parser.add_argument("--model_path", default="walker.pt", type=str, help="Path to save the model.")
 parser.add_argument("--recodex", default=False, action="store_true", help="Running in ReCodEx")
 parser.add_argument("--render_each", default=100, type=int, help="Render some episodes.")
-parser.add_argument("--seed", default=None, type=int, help="Random seed.")
-parser.add_argument("--threads", default=1, type=int, help="Maximum number of threads to use.")
+parser.add_argument("--seed", default=42, type=int, help="Random seed.")
+parser.add_argument("--threads", default=0, type=int, help="Maximum number of threads to use.")
 # For these and any other arguments you add, ReCodEx will keep your default value.
 parser.add_argument("--batch_size", default=64, type=int, help="Batch size.")
-parser.add_argument("--evaluate_each", default=50, type=int, help="Evaluate each number of episodes.")
+parser.add_argument("--evaluate_each", default=100, type=int, help="Evaluate each number of episodes.")
 parser.add_argument("--evaluate_for", default=50, type=int, help="Evaluate the given number of episodes.")
 parser.add_argument("--gamma", default=0.99, type=float, help="Discounting factor.")
-parser.add_argument("--hidden_layer_size", default=64, type=int, help="Size of hidden layer.")
-parser.add_argument("--learning_rate", default=1e-3, type=float, help="Learning rate.")
+parser.add_argument("--hidden_layer_size", default=256, type=int, help="Size of hidden layer.")
+parser.add_argument("--learning_rate", default=3e-4, type=float, help="Learning rate.")
 parser.add_argument("--noise_sigma", default=0.2, type=float, help="UB noise sigma.")
 parser.add_argument("--noise_theta", default=0.15, type=float, help="UB noise theta.")
-parser.add_argument("--replay_buffer_size", default=100_000, type=int, help="Replay buffer size")
+parser.add_argument("--replay_buffer_size", default=1_000_000, type=int, help="Replay buffer size")
 parser.add_argument("--target_tau", default=0.005, type=float, help="Target network update weight.")
 parser.add_argument("--episodes_double", default=1100, type=int, help="Number of episodes to train.")
 parser.add_argument("--episodes_single", default=100, type=int, help="Number of episodes to train.")
@@ -158,6 +159,12 @@ class Agent:
             actions = self._target_actor(states)
             values = self._target_critic(states, actions)
         return values.cpu()
+    
+    def save_actor(self, path: str) -> None:
+        torch.save(self._actor.state_dict(), path)
+
+    def load_actor(self, path: str) -> None:
+        self._actor.load_state_dict(torch.load(path, map_location=self.device))
 
 
 class OrnsteinUhlenbeckNoise:
@@ -182,6 +189,9 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
     npfl139.startup(args.seed, args.threads)
     npfl139.global_keras_initializers()  # Use Keras-style Xavier parameter initialization.
 
+    
+
+
     # Construct the agent.
     agent = Agent(env, args)
 
@@ -199,6 +209,11 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
             done = terminated or truncated
             rewards += reward
         return rewards
+
+    if args.recodex:
+        agent.load_actor(args.model_path)
+        while True:
+            evaluate_episode(True)
 
     noise = OrnsteinUhlenbeckNoise(env.action_space.shape[0], 0, args.noise_theta, args.noise_sigma)
     training = True
@@ -223,8 +238,10 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
                 action = np.clip(action, env.action_space.low, env.action_space.high)
 
                 next_state, reward, terminated, truncated, _ = env.step(action)
+                if reward == -100 and args.env == "BipedalWalker-v3":
+                    reward = 0
                 done = terminated or truncated
-                replay_buffer.append(Transition(state, action, reward, done, next_state))
+                replay_buffer.append(Transition(state, action, reward, terminated, next_state))
                 state = next_state
 
                 if len(replay_buffer) < 4 * args.batch_size:
@@ -239,6 +256,10 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
         # Periodic evaluation
         returns = [evaluate_episode(logging=False) for _ in range(args.evaluate_for)]
         print(f"Evaluation after episode {env.episode}: {np.mean(returns):.2f}")
+        if args.env == "BipedalWalker-v3" and np.mean(returns) >= 250:
+            print("Environment solved!")
+            agent.save_actor(args.model_path)
+            break
 
     # Final evaluation
     while True:

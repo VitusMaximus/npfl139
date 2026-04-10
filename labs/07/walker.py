@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# f5419161-0138-4909-8252-ba9794a63e53
+# 4b50a6fb-a4a6-4b30-9879-0b671f941a72
 import argparse
 import collections
 import copy
@@ -14,21 +16,21 @@ parser = argparse.ArgumentParser()
 # These arguments will be set appropriately by ReCodEx, even if you change them.
 parser.add_argument("--env", default="BipedalWalker-v3", type=str, help="Environment.")
 parser.add_argument("--recodex", default=False, action="store_true", help="Running in ReCodEx")
-parser.add_argument("--render_each", default=0, type=int, help="Render some episodes.")
-parser.add_argument("--seed", default=None, type=int, help="Random seed.")
-parser.add_argument("--threads", default=1, type=int, help="Maximum number of threads to use.")
+parser.add_argument("--render_each", default=100, type=int, help="Render some episodes.")
+parser.add_argument("--seed", default=42, type=int, help="Random seed.")
+parser.add_argument("--threads", default=0, type=int, help="Maximum number of threads to use.")
 # For these and any other arguments you add, ReCodEx will keep your default value.
-parser.add_argument("--batch_size", default=..., type=int, help="Batch size.")
+parser.add_argument("--batch_size", default=256, type=int, help="Batch size.")
 parser.add_argument("--envs", default=8, type=int, help="Environments.")
-parser.add_argument("--evaluate_each", default=..., type=int, help="Evaluate each number of updates.")
-parser.add_argument("--evaluate_for", default=..., type=int, help="Evaluate the given number of episodes.")
-parser.add_argument("--gamma", default=..., type=float, help="Discounting factor.")
-parser.add_argument("--hidden_layer_size", default=..., type=int, help="Size of hidden layer.")
-parser.add_argument("--learning_rate", default=..., type=float, help="Learning rate.")
+parser.add_argument("--evaluate_each", default=100, type=int, help="Evaluate each number of updates.")
+parser.add_argument("--evaluate_for", default=10, type=int, help="Evaluate the given number of episodes.")
+parser.add_argument("--gamma", default=0.99, type=float, help="Discounting factor.")
+parser.add_argument("--hidden_layer_size", default=256, type=int, help="Size of hidden layer.")
+parser.add_argument("--learning_rate", default=1e-4, type=float, help="Learning rate.")
 parser.add_argument("--model_path", default="walker.pt", type=str, help="Model path")
 parser.add_argument("--replay_buffer_size", default=1_000_000, type=int, help="Replay buffer size")
-parser.add_argument("--target_entropy", default=-1, type=float, help="Target entropy per action component.")
-parser.add_argument("--target_tau", default=..., type=float, help="Target network update weight.")
+parser.add_argument("--target_entropy", default=-1.0, type=float, help="Target entropy per action component.")
+parser.add_argument("--target_tau", default=0.005, type=float, help="Target network update weight.")
 
 
 class Agent:
@@ -36,6 +38,11 @@ class Agent:
     device = torch.device(torch.accelerator.current_accelerator() if torch.accelerator.is_available() else "cpu")
 
     def __init__(self, env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
+
+        self._target_entropy = args.target_entropy
+        self._target_tau = args.target_tau
+        self._observation_divisor = None
+
         # TODO: Create an actor.
         class Actor(torch.nn.Module):
             def __init__(self, hidden_layer_size: int):
@@ -44,7 +51,16 @@ class Agent:
                 # - two hidden layers with `hidden_layer_size` and ReLU activation
                 # - a layer for generating means with `env.action_space.shape[0]` units and no activation
                 # - a layer for generating sds with `env.action_space.shape[0]` units and `torch.exp` activation
-                ...
+
+                self._trunk = torch.nn.Sequential(
+                    torch.nn.Linear(env.observation_space.shape[0], hidden_layer_size),
+                    torch.nn.ReLU(),
+                    torch.nn.Linear(hidden_layer_size, hidden_layer_size),
+                    torch.nn.ReLU(),
+                )
+                self._mus = torch.nn.Linear(hidden_layer_size, env.action_space.shape[0])
+                self._sds = torch.nn.Linear(hidden_layer_size, env.action_space.shape[0])
+                
 
                 # Then, create a variable representing a logarithm of alpha, using for example the following:
                 self._log_alpha = torch.nn.Parameter(torch.tensor(np.log(0.1), dtype=torch.float32))
@@ -90,7 +106,37 @@ class Agent:
                 # Do not forget to support computation without sampling (`sample==False`). You
                 # can return for example `torch.tanh(mus) * self.action_scale + self.action_offset`,
                 # or you can use for example `sds=1e-7`.
-                raise NotImplementedError()
+                x = self._trunk(inputs)
+                mus = self._mus(x)
+                #mus = torch.clamp(self._mus(x), min=-10.0, max=10.0)
+
+                if not sample:
+                    return torch.tanh(mus) * self.action_scale + self.action_offset, None, None
+
+                log_sds = self._sds(x)
+                #log_sds = torch.clamp(self._sds(x), min=-20, max=2)
+                sds = torch.exp(log_sds)
+                dist = torch.distributions.Normal(mus, sds)
+                #dist = torch.distributions.TransformedDistribution(
+                #    dist,
+                #    torch.distributions.transforms.ComposeTransform([
+                #        torch.distributions.transforms.TanhTransform(cache_size=1),
+                #        torch.distributions.transforms.AffineTransform(self.action_offset, self.action_scale)
+                #    ])
+                #)
+                #actions = dist.rsample()
+                #log_prob = dist.log_prob(actions).mean(dim=1)
+
+                u = dist.rsample()
+                actions_squashed = torch.tanh(u)
+                log_prob = dist.log_prob(u)
+                log_prob_correction = 2 * (np.log(2) - u - torch.nn.functional.softplus(-2 * u))
+                log_prob = (log_prob - log_prob_correction).mean(dim=1)         
+                actions = actions_squashed * self.action_scale + self.action_offset
+
+                alpha = torch.exp(self._log_alpha)
+                return actions, log_prob, alpha
+            
 
         # Instantiate the actor as `self._actor`.
         self._actor = Actor(args.hidden_layer_size).to(self.device)
@@ -105,11 +151,36 @@ class Agent:
         # two critics and two target critics are created. Note that the critics should be
         # different with respect to each other, but the target critics should be the same
         # as their corresponding original critics.
-        raise NotImplementedError()
+        class Critic(torch.nn.Module):
+            def __init__(self, hidden_layer_size: int) -> None:
+                super().__init__()
+
+                self._model = torch.nn.Sequential(
+                    torch.nn.Linear(env.observation_space.shape[0] + env.action_space.shape[0], hidden_layer_size),
+                    torch.nn.ReLU(),
+                    torch.nn.Linear(hidden_layer_size, hidden_layer_size),
+                    torch.nn.ReLU(),
+                    torch.nn.Linear(hidden_layer_size, 1),
+                )
+
+            def forward(self, states: torch.Tensor, actions: torch.Tensor) -> torch.Tensor:
+                input = torch.cat([states, actions], dim=1)
+                return self._model(input).squeeze(1)
+            
+        self._critic1 = Critic(args.hidden_layer_size).to(self.device)
+        self._critic2 = Critic(args.hidden_layer_size).to(self.device)
+
+        self._target_critic1 = copy.deepcopy(self._critic1)
+        self._target_critic2 = copy.deepcopy(self._critic2)
 
         # TODO: Define an optimizer. Using `torch.optim.Adam` optimizer with
         # the given `args.learning_rate` is a good default.
-        self._optimizer = ...
+        self._actor_optimizer = torch.optim.Adam(self._actor.parameters(), lr=args.learning_rate)
+
+        self._critic_optimizer = torch.optim.Adam(
+            list(self._critic1.parameters()) + list(self._critic2.parameters()),
+            lr=args.learning_rate
+        )
 
         # Create MSE loss.
         self._mse_loss = torch.nn.MSELoss()
@@ -131,7 +202,57 @@ class Agent:
         # Finally, update the two target critic networks exponential moving
         # average with weight `args.target_tau`, using for example the provided
         #   npfl139.update_params_by_ema(target: torch.nn.Module, source: torch.nn.Module, tau: float)
-        raise NotImplementedError()
+
+        self._critic1.train()
+        self._critic2.train()
+        self._actor.train()
+        self._actor_optimizer.zero_grad()
+        self._critic_optimizer.zero_grad()
+
+        critic1_values = self._critic1(states, actions)
+        critic1_loss = self._mse_loss(critic1_values, returns)
+        critic1_loss.backward()
+
+        critic2_values = self._critic2(states, actions)
+        critic2_loss = self._mse_loss(critic2_values, returns)
+        critic2_loss.backward()
+
+        #torch.nn.utils.clip_grad_norm_(
+        #    list(self._critic1.parameters()) + list(self._critic2.parameters()), 
+        #    max_norm=1.0
+        #)
+        
+        self._critic_optimizer.step()
+
+        self._critic1.requires_grad_(False)
+        self._critic2.requires_grad_(False)
+
+        predicted_actions, log_prob, alpha = self._actor(states, sample=True)
+        actor_loss = (alpha.detach() * log_prob - torch.min(
+            self._critic1(states, predicted_actions),
+            self._critic2(states, predicted_actions)
+        )).mean()
+        actor_loss.backward()
+
+        #alpha_loss = (-alpha * (log_prob.detach() + self._target_entropy)).mean()
+        alpha_loss = (-self._actor._log_alpha * (log_prob.detach() + self._target_entropy)).mean()
+        alpha_loss.backward()
+        #torch.nn.utils.clip_grad_norm_(self._actor.parameters(), max_norm=1.0)
+        self._actor_optimizer.step()
+
+        self._critic1.requires_grad_(True)
+        self._critic2.requires_grad_(True)
+
+
+        #with torch.no_grad():
+        #    self._actor._log_alpha.clamp_(min=-20.0, max=2.0)
+
+        npfl139.update_params_by_ema(self._target_critic1, self._critic1, self._target_tau)
+        npfl139.update_params_by_ema(self._target_critic2, self._critic2, self._target_tau)
+        
+
+
+        
 
     # Predict actions without sampling.
     @npfl139.typed_torch_function(device, torch.float32)
@@ -154,7 +275,11 @@ class Agent:
         # TODO: Produce the predicted returns, which are the minimum of
         #    target_critic(s, a) - alpha * log_prob
         #  considering both target critics and actions sampled from the actor.
-        raise NotImplementedError()
+        with torch.no_grad():
+            sampled_actions, log_prob, alpha = self._actor(states, sample=True)
+            target_critic1_values = self._target_critic1(states, sampled_actions)
+            target_critic2_values = self._target_critic2(states, sampled_actions)
+            return torch.min(target_critic1_values, target_critic2_values) - alpha * log_prob
 
     # Serialization methods.
     def save_actor(self, path: str) -> None:
@@ -177,7 +302,7 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
         rewards, done = 0, False
         while not done:
             # TODO: Predict an action by using a greedy policy.
-            action = ...
+            action = agent.predict_mean_actions(state[None])[0]
             state, reward, terminated, truncated, _ = env.step(action)
             done = terminated or truncated
             rewards += reward
@@ -194,7 +319,7 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
                               vector_kwargs={"autoreset_mode": gym.vector.AutoresetMode.SAME_STEP})
 
     # Replay memory of a specified maximum size.
-    replay_buffer = npfl139.MonolithicReplayBuffer(args.replay_buffer_size, args.seed)
+    replay_buffer = npfl139.ReplayBuffer(args.replay_buffer_size, args.seed)
     Transition = collections.namedtuple("Transition", ["state", "action", "reward", "done", "next_state"])
 
     state = vector_env.reset(seed=args.seed)[0]
@@ -206,15 +331,23 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
             action = agent.predict_sampled_actions(state)
 
             next_state, reward, terminated, truncated, _ = vector_env.step(action)
-            done = terminated | truncated
+            done = terminated
             replay_buffer.append_batch(Transition(state, action, reward, done, next_state))
             state = next_state
 
             # Training
             if len(replay_buffer) >= 10 * args.batch_size:
-                # Randomly uniformly sample transitions from the replay buffer.
-                states, actions, rewards, dones, next_states = replay_buffer.sample(args.batch_size)
-                # TODO: Perform the training
+                for _ in range(args.envs):
+
+                    # Randomly uniformly sample transitions from the replay buffer.
+                    states, actions, rewards, dones, next_states = replay_buffer.sample(args.batch_size)
+                    # TODO: Perform the training
+                    #rewards = np.where((rewards == -100.0) & (dones == True), 0, rewards)
+
+
+                    next_values = agent.predict_values(next_states)
+                    returns = rewards + args.gamma * next_values * (1 - dones)
+                    agent.train(states, actions, returns)
 
         # Periodic evaluation
         returns = [evaluate_episode() for _ in range(args.evaluate_for)]
