@@ -14,8 +14,8 @@ npfl139.require_version("2526.7")
 
 parser = argparse.ArgumentParser()
 # These arguments will be set appropriately by ReCodEx, even if you change them.
-parser.add_argument("--env", default="BipedalWalker-v3", type=str, help="Environment.")
-parser.add_argument("--model_path", default="walker.pt", type=str, help="Path to save the model.")
+parser.add_argument("--env", default="BipedalWalkerHardcore-v3", type=str, help="Environment.")
+parser.add_argument("--model_path", default="hardcore_walker.pt", type=str, help="Path to save the model.")
 parser.add_argument("--recodex", default=False, action="store_true", help="Running in ReCodEx")
 parser.add_argument("--render_each", default=100, type=int, help="Render some episodes.")
 parser.add_argument("--seed", default=42, type=int, help="Random seed.")
@@ -44,6 +44,8 @@ class Actor(torch.nn.Module):
 
         self._model = torch.nn.Sequential(
             torch.nn.Linear(env.observation_space.shape[0], args.hidden_layer_size),
+            torch.nn.ReLU(),
+            torch.nn.Linear(args.hidden_layer_size, args.hidden_layer_size),
             torch.nn.ReLU(),
             torch.nn.Linear(args.hidden_layer_size, env.action_space.shape[0]),
             torch.nn.Tanh(),
@@ -238,7 +240,7 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
                 action = np.clip(action, env.action_space.low, env.action_space.high)
 
                 next_state, reward, terminated, truncated, _ = env.step(action)
-                if reward == -100 and args.env == "BipedalWalker-v3":
+                if reward == -100 and (args.env == "BipedalWalker-v3" or args.env == "BipedalWalkerHardcore-v3"):
                     reward = 0
                 done = terminated or truncated
                 replay_buffer.append(Transition(state, action, reward, terminated, next_state))

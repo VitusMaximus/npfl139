@@ -114,8 +114,8 @@ class Agent:
                 if not sample:
                     return torch.tanh(mus) * self.action_scale + self.action_offset, None, None
 
-                log_sds = self._sds(x)
-                #log_sds = torch.clamp(self._sds(x), min=-20, max=2)
+                #log_sds = self._sds(x)
+                log_sds = torch.clamp(self._sds(x), min=-20, max=2)
                 sds = torch.exp(log_sds)
                 dist = torch.distributions.Normal(mus, sds)
                 #dist = torch.distributions.TransformedDistribution(
@@ -330,10 +330,12 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
 
     # Replay memory of a specified maximum size.
     replay_buffer = npfl139.ReplayBuffer(args.replay_buffer_size, args.seed)
-    replay_buffer = npfl139.ReplayBuffer(args.replay_buffer_size, args.seed)
+
     Transition = collections.namedtuple("Transition", ["state", "action", "reward", "done", "next_state"])
 
+    last_ev_returns = collections.deque(maxlen=100)
     state = vector_env.reset(seed=args.seed)[0]
+    best_return = float("-inf")
     training = True
     while training:
         # Training
@@ -342,7 +344,7 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
             action = agent.predict_sampled_actions(state)
 
             next_state, reward, terminated, truncated, _ = vector_env.step(action)
-            done = terminated
+            done = terminated | truncated
             replay_buffer.append_batch(Transition(state, action, reward, done, next_state))
             state = next_state
 
@@ -353,7 +355,7 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
                     # Randomly uniformly sample transitions from the replay buffer.
                     states, actions, rewards, dones, next_states = replay_buffer.sample(args.batch_size)
                     # TODO: Perform the training
-                    #rewards = np.where((rewards == -100.0) & (dones == True), 0, rewards)
+                    rewards = np.where((rewards == -100.0) & (dones == True), 0, rewards)
 
 
                     next_values = agent.predict_values(next_states)
@@ -362,6 +364,13 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
 
         # Periodic evaluation
         returns = [evaluate_episode() for _ in range(args.evaluate_for)]
+        last_ev_returns.extend(returns)
+
+        mean_return = np.mean(last_ev_returns)
+        print(f"Evaluation return: {mean_return:.2f}, best: {best_return:.2f}")
+        if mean_return > best_return:
+            best_return = mean_return
+            agent.save_actor(args.model_path)
 
     # You can save the agent using:
     #   agent.save_actor(args.model_path)
