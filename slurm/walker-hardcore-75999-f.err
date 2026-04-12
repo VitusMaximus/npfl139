@@ -1,0 +1,42 @@
+Episode 10, mean 100-episode return -14.62 +-1.29, returns -15.066 -14.2104 -13.1931 -14.2609 -14.7234 -16.712 -14.212 -17.1088 -13.5951 -13.0912
+Episode 20, mean 100-episode return -15.00 +-1.59, returns -19.56 -14.104 -17.8575 -14.9698 -13.9832 -15.3492 -14.5179 -13.8935 -14.6511 -14.9039
+Episode 30, mean 100-episode return -14.52 +-1.62, returns -14.762 -14.0589 -12.4702 -15.5413 -11.7746 -14.0428 -12.4736 -14.1439 -14.2743 -12.1005
+Episode 40, mean 100-episode return -28.16 +-23.76, returns -68.3309 -72.7626 -72.3377 -66.6282 -61.8263 -72.7611 -68.3183 -72.8136 -62.2858 -72.7853
+Episode 50, mean 100-episode return -42.72 +-36.21, returns -106.987 -106.663 -105.873 -106.745 -88.3477 -105.628 -90.1362 -88.5744 -106.112 -104.258
+Episode 60, mean 100-episode return -54.41 +-42.15, returns -112.989 -112.881 -112.792 -112.848 -113.055 -113.007 -112.818 -112.916 -112.844 -112.721
+Episode 70, mean 100-episode return -62.45 +-43.71, returns -110.1 -109.993 -110.031 -111.294 -111.131 -111.17 -111.122 -110.936 -110.099 -110.776
+Episode 80, mean 100-episode return -68.01 +-43.45, returns -106.091 -105.7 -106.368 -108.392 -108.167 -105.9 -108.297 -105.992 -108.403 -105.897
+Episode 90, mean 100-episode return -72.30 +-42.73, returns -107.849 -107.223 -105.143 -107.32 -107.428 -106.844 -105.034 -104.904 -107.117 -107.831
+Failed to create secure directory (/run/user/3046/pulse): No such file or directory
+ALSA lib confmisc.c:855:(parse_card) cannot find card '0'
+ALSA lib conf.c:5178:(_snd_config_evaluate) function snd_func_card_inum returned error: No such file or directory
+ALSA lib confmisc.c:422:(snd_func_concat) error evaluating strings
+ALSA lib conf.c:5178:(_snd_config_evaluate) function snd_func_concat returned error: No such file or directory
+ALSA lib confmisc.c:1334:(snd_func_refer) error evaluating name
+ALSA lib conf.c:5178:(_snd_config_evaluate) function snd_func_refer returned error: No such file or directory
+ALSA lib conf.c:5701:(snd_config_expand) Evaluate error: No such file or directory
+ALSA lib pcm.c:2664:(snd_pcm_open_noupdate) Unknown PCM default
+Episode 100, mean 100-episode return -75.29 +-42.04, returns -109.662 -108.519 -108.652 -108.041 -110.773 -108.946 -110.943 -108.079 -108.682 -39.4793
+Episode 110, mean 100-episode return -81.06 +-36.98, returns -74.7479 -73.0527 -68.9879 -74.7511 -68.3629 -73.0647 -74.6867 -68.7934 -74.7747 -72.0913
+Episode 120, mean 100-episode return -89.32 +-30.02, returns -87.2863 -90.9711 -104.074 -96.1854 -105.526 -90.234 -91.208 -105.455 -104.002 -104.756
+Episode 130, mean 100-episode return -97.94 +-16.24, returns -99.6244 -99.3008 -99.4358 -100.581 -100.09 -98.3958 -99.5806 -100.372 -100.768 -99.0675
+Episode 140, mean 100-episode return -100.75 +-13.08, returns -98.661 -97.0286 -96.788 -96.1152 -98.0324 -98.208 -95.9271 -96.8943 -96.0728 -98.026
+Episode 150, mean 100-episode return -100.57 +-12.85, returns -98.0686 -99.672 -100.206 -99.5515 -99.8163 -98.0661 -99.7847 -97.9761 -99.779 -99.2206
+Episode 160, mean 100-episode return -99.11 +-12.18, returns -98.3963 -98.1078 -98.2407 -97.3613 -98.7188 -98.3347 -98.4622 -97.3806 -98.7067 -98.6824
+Episode 170, mean 100-episode return -97.62 +-11.60, returns -96.352 -95.6354 -98.9437 -97.1867 -98.9454 -94.2039 -91.3016 -96.4934 -91.8031 -97.2731
+Episode 180, mean 100-episode return -96.70 +-11.18, returns -98.9546 -97.1336 -97.7127 -97.6013 -97.0556 -97.3632 -97.2794 -97.355 -97.6931 -98.492
+Episode 190, mean 100-episode return -95.18 +-10.74, returns -89.653 -91.6198 -92.5388 -92.912 -91.1265 -91.1821 -90.8702 -90.9369 -91.5609 -92.3887
+Episode 200, mean 100-episode return -94.29 +-8.14, returns -93.553 -91.7434 -94.3336 -94.2489 -92.5196 -94.0529 -91.8179 -93.7511 -93.7748 -93.5235
+Episode 210, mean 100-episode return -96.55 +-3.55, returns -93.4361 -96.564 -96.2499 -94.2883 -93.7627 -93.1786 -94.3598 -94.2135 -95.8116 -97.1882
+Episode 220, mean 100-episode return -96.36 +-2.74, returns -94.6012 -96.1689 -98.1314 -97.1704 -96.0753 -95.1155 -96.935 -94.5243 -94.3225 -97.1291
+Episode 230, mean 100-episode return -95.35 +-4.37, returns -93.1196 -93.2712 -92.9139 -92.8026 -93.1229 -93.1404 -89.98 -60.9064 -92.8134 -94.9268
+Episode 240, mean 100-episode return -95.05 +-4.33, returns -94.6409 -94.0036 -94.1105 -93.6988 -93.9299 -94.3388 -93.5611 -93.4991 -95.0057 -94.3503
+Episode 250, mean 100-episode return -91.97 +-10.18, returns -70.5068 -51.4863 -53.766 -56.9455 -54.1333 -90.0076 -65.8262 -57.6991 -91.9684 -92.3577
+Episode 260, mean 100-episode return -88.93 +-13.28, returns -53.9055 -59.494 -91.9105 -56.5226 -50.5814 -86.1697 -86.3547 -56.3438 -86.8592 -50.0252
+Episode 270, mean 100-episode return -88.42 +-13.08, returns -89.6571 -91.5464 -91.2173 -90.9744 -91.3366 -89.4576 -91.556 -90.8828 -88.9502 -91.3696
+Episode 280, mean 100-episode return -87.72 +-12.77, returns -91.2028 -87.5633 -87.3398 -91.7731 -93.2955 -89.7138 -90.2398 -91.8633 -91.9077 -92.1298
+Episode 290, mean 100-episode return -88.55 +-13.24, returns -99.3721 -99.1365 -99.1073 -100.825 -99.9747 -99.3296 -99.7955 -100.556 -99.2027 -99.7568
+slurmstepd: error: *** JOB 75999 ON gpu-node3 CANCELLED AT 2026-04-11T15:16:05 ***
+slurmstepd: error: common_file_write_uint32s: write pid 2263874 to /sys/fs/cgroup/cgroup.procs failed: Device or resource busy
+slurmstepd: error: Unable to move pid 2263874 to init root cgroup /sys/fs/cgroup
+slurmstepd: error: error unlocking cgroup '/sys/fs/cgroup/system.slice/slurmstepd.scope' : Bad file descriptor
