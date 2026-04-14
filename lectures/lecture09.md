@@ -1,4 +1,4 @@
-### Lecture: 09. Transformed Rewards, R2D2, Agent57, MERLIN
+### Lecture: 9. Transformed Rewards, R2D2, Agent57, MERLIN
 #### Date: Apr 14
 #### Slides: https://ufal.mff.cuni.cz/~straka/courses/npfl139/2526/slides/?09
 #### Reading: https://ufal.mff.cuni.cz/~straka/courses/npfl139/2526/slides.pdf/npfl139-2526-09.pdf,PDF Slides
