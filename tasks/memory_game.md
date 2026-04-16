@@ -28,7 +28,7 @@ module.
 Your goal is to solve the environment, using supervised learning via the provided
 _expert episodes_ and networks with external memory. The environment implements
 an `env.expert_episode()` method, which returns a fresh correct episode
-as a list of `(state, action)` pairs (with the last `action` being `None`).
+as a list of `(observation, action)` pairs (with the last `action` being `None`).
 
 ReCodEx evaluates your solution on environments with 8, 12 and 16 cards
 (utilizing the `--cards` argument). For each card number, 100 episodes are

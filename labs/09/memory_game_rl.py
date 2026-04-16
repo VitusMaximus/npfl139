@@ -41,11 +41,11 @@ class Agent:
                 # TODO(memory_game): Create suitable layers.
                 raise NotImplementedError()
 
-            def forward(self, memory, state):
-                # Encode the input state, which is a (card, observation) pair,
+            def forward(self, memory, observation):
+                # Encode the input observation, which is a (card, observation) pair,
                 # by representing each element as one-hot and concatenating them, resulting
                 # in a vector of length `sum(env.observation_space.nvec)`.
-                encoded_input = torch.cat([torch.nn.functional.one_hot(torch.relu(state[:, i]), dim).float()
+                encoded_input = torch.cat([torch.nn.functional.one_hot(torch.relu(observation[:, i]), dim).float()
                                            for i, dim in enumerate(env.observation_space.nvec)], dim=-1)
 
                 # TODO(memory_game): Generate a read key for memory read from the encoded input, by using
@@ -81,8 +81,8 @@ class Agent:
         raise NotImplementedError()
 
     @npfl139.typed_torch_function(device, torch.int64, torch.int64, torch.float32)
-    def _train(self, states, actions, returns):
-        # TODO: Train the network given a batch of sequences of `states`
+    def _train(self, observations, actions, returns):
+        # TODO: Train the network given a batch of sequences of `observations`
         # (each being a (card, symbol) pair), sampled `actions` and observed `returns`.
         # Specifically, start with a batch of empty memories, and run the agent
         # sequentially as many times as necessary, using `actions` as actions.
@@ -104,10 +104,10 @@ class Agent:
         raise NotImplementedError()
 
     @npfl139.typed_torch_function(device, torch.float32, torch.int64)
-    def predict(self, memory, state):
+    def predict(self, memory, observation):
         self._model.eval()
         with torch.no_grad():
-            memory, logits = self._model(memory, state)
+            memory, logits = self._model(memory, observation)
             return memory, torch.softmax(logits, dim=-1)
 
 
@@ -129,12 +129,12 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
     agent = Agent(env, args)
 
     def evaluate_episode(start_evaluation: bool = False, logging: bool = True) -> float:
-        state, memory = env.reset(start_evaluation=start_evaluation, logging=logging)[0], agent.zero_memory()
+        observation, memory = env.reset(start_evaluation=start_evaluation, logging=logging)[0], agent.zero_memory()
         rewards, done = 0, False
         while not done:
             # TODO(memory_game): Find out which action to use.
             action = ...
-            state, reward, terminated, truncated, _ = env.step(action)
+            observation, reward, terminated, truncated, _ = env.step(action)
             done = terminated or truncated
             rewards += reward
         return rewards
@@ -146,15 +146,15 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
         for _ in range(args.evaluate_each // args.batch_size):
             episodes = []
             for _ in range(args.batch_size):
-                state, memory, episode, done = env.reset()[0], agent.zero_memory(), [], False
+                observation, memory, episode, done = env.reset()[0], agent.zero_memory(), [], False
                 while not done:
                     # TODO: Choose an action according to the generated distribution.
                     action = None
 
-                    next_state, reward, terminated, truncated, _ = env.step(action)
+                    next_observation, reward, terminated, truncated, _ = env.step(action)
                     done = terminated or truncated
-                    episode.append([state, action, reward])
-                    state = next_state
+                    episode.append([observation, action, reward])
+                    observation = next_observation
 
                 # TODO: In the `episode`, compute returns from the rewards.
 
