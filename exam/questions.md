@@ -247,8 +247,71 @@
 
 - Sketch the population based training used in the IMPALA algorithm. [5]
 
+#### Questions@:, Lecture 9 Questions
 - In PopArt normalization, the value function is computed based on a normalized
   value predictor $n$ as $\sigma n + \mu$. Describe how to maintain $\sigma$ and
   $\mu$, how to compute normalized advantage based on return $G$, and how is the
   normalized value predictor modified when the estimates of $\sigma$ and $\mu$
   change. [10]
+
+- Define the transformed Bellman operator. [5]
+
+- Define the transformed Bellman operator. Then, assuming $h$ is strictly
+  monotonically increasing function and considering a deterministic Markov
+  decision process, show to what does a transformed Bellman operator
+  $\mathcal{T}_h$ converge and prove it. [10]
+
+- Write down the return transformation used for Atari environments (for example
+  by R2D2). [5]
+
+- Describe the replay buffer elements in R2D2. What is the difference between
+  the zero-state and stored-state strategies, and how is burn-in used? [5]
+
+- Write down the Retrace operator and describe the three possibilities of
+  setting the traces $c_t$: importance sampling, Tree-backup($\lambda$), and
+  Retrace($\lambda$). [10]
+
+- Describe the RL-LSTM model proposed in MERLIN. [5]
+
+- Describe the RL-MEM model proposed in MERLIN and compare it to RL-LSTM. [10]
+
+- Describe the architecture of the MERLIN model and explain its difference
+  to RL-MEM model. [10]
+
+#### Questions@:, Lecture 10 Questions
+- What is the value $L_{\pi_\textrm{old}}(\pi)$ used in TRPO to approximate
+  $v_{\pi}$? What is the value the TRPO algorithm maximizes, and under
+  what constraint? [5]
+
+- Write down the PPO algorithm, including the generalized advantage estimation
+  (the $n$-step truncated lambda return. [10]
+
+- Define the Partially observable stochastic game. [5]
+
+- Define the Partially observable stochastic game, Agent-environment cycle game,
+  and prove that every POSG can be represented as AECG and vice versa. [10]
+
+- In a Partially observable stochastic game, define the expected return for
+  a given agent (including the probability of a trajectory), define the
+  best response, and define the Nash equilibrium. [10]
+
+#### Questions@:, Lecture 11 Questions
+- Considering multi-arm bandits, write down the UCB algorithm. [5]
+
+- Describe the inputs and outputs of a neural network used in AlphaZero, and
+  describe the inputs and outputs of a Monte-Carlo tree search. [5]
+
+- Write down the loss used in AlphaZero algorithm. [5]
+
+- What quantities are kept in a node of a AlphaZero Monte-Carlo tree search? [5]
+
+- How are actions selected in a AlphaZero Monte-Carlo tree search? [10]
+
+- What does AlphaZero use to maintain exploration in a Monte-Carlo tree search,
+  i.e., how does AlphaZero make sure that even actions with very low prior are
+  sampled enough? [5]
+
+- Describe the backup phase of AlphaZero Monte-Carlo tree search, i.e., the
+  steps you perform when you reach a leaf during the tree search. [5]
+
+- How are the actions selected in AlphaZero self-play? [5]
