@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
+# f5419161-0138-4909-8252-ba9794a63e53
+# 4b50a6fb-a4a6-4b30-9879-0b671f941a72
 import argparse
 
 import gymnasium as gym
 import numpy as np
-
+from collections import deque
 import npfl139
 npfl139.require_version("2526.7")
 
@@ -67,6 +69,7 @@ def main(args: argparse.Namespace) -> np.ndarray:
         state, done = env.reset()[0], False
 
         # Generate episode and update V using the given TD method
+        trace = deque()
         while not done:
             best_action = argmax_with_tolerance(R[state] + (1 - D[state]) * args.gamma * V[N[state]])
             action = best_action if generator.uniform() >= args.epsilon else env.action_space.sample()
@@ -74,6 +77,8 @@ def main(args: argparse.Namespace) -> np.ndarray:
 
             next_state, reward, terminated, truncated, _ = env.step(action)
             done = terminated or truncated
+
+            trace.append({"state": state, "next_state": next_state, "action": action, "reward": reward, "action_prob": action_prob})
 
             # TODO: Perform the update to the state value function `V`, using
             # a TD update with the following parameters:
@@ -104,7 +109,74 @@ def main(args: argparse.Namespace) -> np.ndarray:
             # and during these updates, use the `compute_target_policy(V)` with
             # the up-to-date value of `V`.
 
+            if len(trace) >= args.n or done:
+                G = 0
+
+                m = min(args.n, len(trace))
+
+                G = 0
+                if not done and m == args.n:
+                    G += V[next_state]
+
+                
+                for i in reversed(range(m)):
+                    rho = 1
+                    if args.off_policy:
+                        target_policy = compute_target_policy(V)[trace[i]["state"]][trace[i]["action"]]
+                        rho = target_policy / trace[i]["action_prob"]
+
+                        if args.vtrace_clip is not None:
+                            rho = min(rho, args.vtrace_clip)
+
+                    if args.trace_lambda is not None:
+                        if i == m - 1 and done:
+                            G_ttp1 = rho * trace[i]["reward"] + (1 - rho) * V[trace[i]["state"]]
+                        else:
+                            G_ttp1 = rho * (trace[i]["reward"] + args.gamma * V[trace[i]["next_state"]]) + (1 - rho) * V[trace[i]["state"]]
+
+                        G = (1 - args.trace_lambda) * G_ttp1 + args.trace_lambda * (rho * (trace[i]["reward"] + args.gamma * G) + (1 - rho) * V[trace[i]["state"]])
+
+                    else:
+                        G = rho * (trace[i]["reward"] + args.gamma * G) + (1 - rho) * V[trace[i]["state"]]
+
+
+                V[trace[0]["state"]] += args.alpha * (G - V[trace[0]["state"]])
+            
+                trace.popleft()
+
+
+            
+            if done:
+                while len(trace) > 0:
+                    G = 0
+                    m = len(trace)
+
+                    for i in reversed(range(m)):
+                        rho = 1
+                        if args.off_policy:
+                            target_policy = compute_target_policy(V)[trace[i]["state"]][trace[i]["action"]]
+                            rho = target_policy / trace[i]["action_prob"]
+
+                            if args.vtrace_clip is not None:
+                                rho = min(rho, args.vtrace_clip)
+
+                        if args.trace_lambda is not None:
+                            if i == m - 1:
+                                G_ttp1 = rho * trace[i]["reward"] + (1 - rho) * V[trace[i]["state"]]
+                            else:
+                                G_ttp1 = rho * (trace[i]["reward"] + args.gamma * V[trace[i]["next_state"]]) + (1 - rho) * V[trace[i]["state"]]
+
+                            G = (1 - args.trace_lambda) * G_ttp1 + args.trace_lambda * (rho * (trace[i]["reward"] + args.gamma * G) + (1 - rho) * V[trace[i]["state"]])
+
+                        else:
+                            G = rho * (trace[i]["reward"] + args.gamma * G) + (1 - rho) * V[trace[i]["state"]]
+
+                    V[trace[0]["state"]] += args.alpha * (G - V[trace[0]["state"]])
+                    trace.popleft()
+
             state = next_state
+
+
 
     return V
 
