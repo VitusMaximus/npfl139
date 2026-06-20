@@ -143,8 +143,7 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
     if args.memory_cells is None:
         args.memory_cells = 2 * args.cards
     if args.memory_cell_size is None:
-        args.memory_cell_size = 3 * args.cards // 2
-    assert sum(env.observation_space.nvec) == args.memory_cell_size
+        args.memory_cell_size = 2 * args.cards
 
     agent = Agent(env, args)
     rng = np.random.default_rng(args.seed)
