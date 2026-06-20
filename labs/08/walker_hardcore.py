@@ -16,7 +16,7 @@ npfl139.require_version("2526.7")
 
 parser = argparse.ArgumentParser()
 # These arguments will be set appropriately by ReCodEx, even if you change them.
-parser.add_argument("--env", default="BipedalWalkerHardcore-v3", type=str, help="Environment.")
+parser.add_argument("--env", default="BipedalWalker-v3", type=str, help="Environment.")
 parser.add_argument("--recodex", default=False, action="store_true", help="Running in ReCodEx")
 parser.add_argument("--render_each", default=100, type=int, help="Render some episodes.")
 parser.add_argument("--seed", default=42, type=int, help="Random seed.")
@@ -29,7 +29,7 @@ parser.add_argument("--evaluate_for", default=10, type=int, help="Evaluate the g
 parser.add_argument("--gamma", default=0.99, type=float, help="Discounting factor.")
 parser.add_argument("--hidden_layer_size", default=256, type=int, help="Size of hidden layer.")
 parser.add_argument("--learning_rate", default=1e-4, type=float, help="Learning rate.")
-parser.add_argument("--model_path", default="hardcore_walker.pt", type=str, help="Model path")
+parser.add_argument("--model_path", default="SAC_walker.pt", type=str, help="Model path")
 parser.add_argument("--replay_buffer_size", default=1_000_000, type=int, help="Replay buffer size")
 parser.add_argument("--target_entropy", default=-1.0, type=float, help="Target entropy per action component.")
 parser.add_argument("--target_tau", default=0.005, type=float, help="Target network update weight.")
