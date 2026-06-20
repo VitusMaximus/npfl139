@@ -65,14 +65,14 @@ class Pisqorky {
   }
 
   void board_features(float* output) const {
-    // TODO: This representation function does not currently indicate which player
-    // is currently on move, you need to modify it so it does. You can either make
-    // the current player have a fixed ID (0 or 1), or you can add another channel
-    // indicating the current player (increase `Pisqorky::C` in that case).
+    // Canonical "side-to-move" view: channel 0 is empty, channel 1 is the
+    // current player's stones, channel 2 is the opponent's stones.
+    const int8_t me = 1 + to_play;
+    const int8_t opp = 2 - to_play;
     for (auto field : board) {
         *output++ = field == 0;
-        *output++ = field == 1;
-        *output++ = field == 2;
+        *output++ = field == me;
+        *output++ = field == opp;
     }
   }
 

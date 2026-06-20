@@ -79,13 +79,15 @@ class AZQuiz {
   }
 
   void board_features(float* output) const {
-    // TODO: This representation function does not currently indicate which player
-    // is currently on move, you need to modify it so it does. You can either make
-    // the current player have a fixed ID (0 or 1), or you can add another channel
-    // indicating the current player (increase `AZQuiz::C` in that case).
+    // Canonical "side-to-move" view: channel 0 is the current player's stones,
+    // channel 1 is the opponent's, channel 2 is the unanswered field, channel 3
+    // is the valid (in-triangle) mask. This keeps C unchanged while still
+    // encoding whose turn it is.
+    const int8_t me = 2 + to_play;
+    const int8_t opp = 3 - to_play;
     for (auto field : board) {
-      *output++ = field == 2;
-      *output++ = field == 3;
+      *output++ = field == me;
+      *output++ = field == opp;
       *output++ = field == 1;
       *output++ = field >= 0;
     }

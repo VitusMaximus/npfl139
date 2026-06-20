@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
+# f5419161-0138-4909-8252-ba9794a63e53
+# 4b50a6fb-a4a6-4b30-9879-0b671f941a72
 import argparse
 import json
 
 import peft
 import torch
 import transformers
-
+import numpy as np
 import npfl139
 npfl139.require_version("2526.14.1")
 
@@ -16,19 +18,19 @@ parser.add_argument("--lora_rank", default=32, type=int, help="LoRA rank to use.
 parser.add_argument("--recodex", default=False, action="store_true", help="Running in ReCodEx.")
 parser.add_argument("--seed", default=None, type=int, help="Random seed.")
 parser.add_argument("--task", default="arithmetic", type=str, help="LLM task to solve.")
-parser.add_argument("--threads", default=1, type=int, help="Maximum number of threads to use.")
+parser.add_argument("--threads", default=0, type=int, help="Maximum number of threads to use.")
 # For these and any other arguments you add, ReCodEx will keep your default value.
-parser.add_argument("--batch_size", default=..., type=int, help="Batch size.")
-parser.add_argument("--clip_epsilon", default=..., type=float, help="Clipping epsilon.")
+parser.add_argument("--batch_size", default=64, type=int, help="Batch size.")
+parser.add_argument("--clip_epsilon", default=0.1, type=float, help="Clipping epsilon.")
 parser.add_argument("--dev_size", default=256, type=int, help="Number of examples to evaluate.")
-parser.add_argument("--epochs", default=..., type=int, help="Epochs to train each iteration.")
+parser.add_argument("--epochs", default=1, type=int, help="Epochs to train each iteration.")
 parser.add_argument("--evaluate_each", default=10, type=int, help="Evaluate each number of episodes.")
-parser.add_argument("--learning_rate", default=..., type=float, help="Learning rate.")
+parser.add_argument("--learning_rate", default=5e-5, type=float, help="Learning rate.")
 parser.add_argument("--max_tokens", default=64, type=int, help="Maximum length of generated outputs.")
 parser.add_argument("--model_path", default="rlvr.pt", type=str, help="Path where to save the model.")
-parser.add_argument("--train_dataset", default=..., type=int, help="Train dataset size per iteration.")
-parser.add_argument("--train_outcomes", default=..., type=int, help="Number of outcomes per training prompt.")
-
+parser.add_argument("--train_dataset", default=8, type=int, help="Train dataset size per iteration.")
+parser.add_argument("--train_outcomes", default=8, type=int, help="Number of outcomes per training prompt.")
+parser.add_argument("--stop_accuracy", default=0.61, type=float, help="Stop when accuracy reaches this value.")
 
 class LLMAgent(torch.nn.Module):
     # Use GPU if available.
@@ -38,6 +40,7 @@ class LLMAgent(torch.nn.Module):
         super().__init__()
         self._task = task
         self._args = args
+        self.eps = args.clip_epsilon
 
         # Create a suitable tokenizer.
         self._tokenizer = transformers.AutoTokenizer.from_pretrained(args.llm)
@@ -124,7 +127,18 @@ class LLMAgent(torch.nn.Module):
         # (or you can use any other algorithm you find suitable). As in the Dr. GRPO paper,
         # compute the loss for every non-padding token and then average it across all valid
         # tokens in the batch.
-        ...
+        self._optimizer.zero_grad()
+        new_probs = self.token_probabilities(prompts, token_ids)
+        div = new_probs / old_probs
+        advantages = advantages.reshape(-1,1)
+        clip = torch.clamp(div,1-self.eps,1+self.eps)*advantages
+        mask = token_ids !=-100
+        minimum = torch.minimum(div*advantages,clip)
+        loss = -(minimum * mask).sum() / mask.sum()
+        loss.backward()
+        torch.nn.utils.clip_grad_norm_(
+            (param for param in self._llm.parameters() if param.requires_grad), max_norm=1.0)
+        self._optimizer.step()
 
     # Serialization methods.
     def save_lora(self, path: str) -> None:
@@ -164,23 +178,34 @@ def main(args: argparse.Namespace) -> LLMAgent | None:
     # Create a dev set with fixed seed for consistent evaluation across runs.
     dev = npfl139.llm.Task.from_name(args.task)(seed=42).create_dataset(args.dev_size)
 
+    llm_agent.save_args(f"{args.model_path}.json", args)
+    best_accuracy = -1.0
+
     training = True
+    iter = 0
     while training:
+        iter +=1
         for _ in range(args.evaluate_each):
             # TODO: Create a training set for this iteration; the `task.create_dataset(size: int)`
             # method creates a list of task examples, each with a `prompt` and an `answer` attribute.
-            ...
+            train = task.create_dataset(args.train_dataset)
 
             # TODO: Generate responses for the constructed training set using `llm_agent.generate`.
             # For each prompt, generate `args.train_outcomes` randomly sampled (i.e., with `sample=True`)
             # responses.
-            ...
+            prompts = [x.prompt for x in train for _ in range(args.train_outcomes)]
+            answers = [x.answer for x in train for _ in range(args.train_outcomes)]
+            responses, token_ids, probs = llm_agent.generate(prompts, sample=True, output_probs=True)
 
             # TODO: Compute the rewards for the generated responses.
-            #
             # The `task.extract_answer(response: str) -> str | None` method can be used to extract
             # an answer from a generated response, if present.
-            #
+            rewards = torch.zeros(len(responses))
+            for i in range(len(responses)):
+                answer = task.extract_answer(responses[i])
+                if answer is not None:
+                    rewards[i] = 1.0 if answer == answers[i] else 0.15
+
             # There are many possible ways to define rewards:
             # - The most rigid variant assigns a reward of 1 to a correct answer and 0 to both
             #   an incorrect or a missing answer.
@@ -192,23 +217,41 @@ def main(args: argparse.Namespace) -> LLMAgent | None:
             # - Lastly, we might introduce length-based rewards for correct answers too, slightly
             #   preferring shorter answers to avoid repetitions and other irrelevant content.
             # Note that the assignment can be solved by any of the above approaches.
-            ...
+            
 
             # TODO: Compute the advantages based on the rewards. Following Dr. GRPO approach,
             # it is sufficient to mean-center the rewards for each prompt (without also
             # dividing by the standard deviation).
-            ...
+            rewards = rewards.reshape(-1, args.train_outcomes).to(llm_agent.device)
+            advantages = (rewards - torch.mean(rewards, dim=1,keepdim=True)).reshape(-1)
 
             # TODO: Train on the generated responses using `llm_agent.train_batch` (possibly multiple times).
-            ...
+            for _ in range(args.epochs):
+                perm = torch.randperm(len(prompts))
+                for b in range(0, len(prompts), args.batch_size):
+                    idx = perm[b:b + args.batch_size]
+                    llm_agent.train_batch(
+                        [prompts[i] for i in idx],
+                        token_ids[idx],
+                        advantages[idx],
+                        probs[idx],
+                    )
 
         # TODO: Perform evaluation by calling `llm_agent.generate` on the dev set
         # batch by batch and then computing the accuracy using `task.evaluate`.
-        ...
+        answers = []
+        for b in range(0,len(dev),args.batch_size):
+            answers.extend(llm_agent.generate([x.prompt for x in dev[b:b+args.batch_size]])[0])
+        acc = task.evaluate(answers,dev)
+        print(f"Accuracy after episode {iter*args.evaluate_each}: {acc*100:.2f}%", flush=True)
 
-    # Use the following code to save the final model and the arguments.
-    #   llm_agent.save_args(f"{args.model_path}.json", args)
-    #   llm_agent.save_lora(args.model_path)
+        if acc > best_accuracy:
+            best_accuracy = acc
+            llm_agent.save_lora(args.model_path)
+            print(f"  New best dev accuracy {acc*100:.2f}%, saved model to {args.model_path}.", flush=True)
+
+        if acc > args.stop_accuracy:
+            break
 
 
 if __name__ == "__main__":

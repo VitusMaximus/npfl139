@@ -5,9 +5,13 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #pragma once
 
+#include <algorithm>
 #include <condition_variable>
+#include <cstdint>
 #include <exception>
+#include <functional>
 #include <mutex>
+#include <random>
 #include <thread>
 #include <tuple>
 #include <vector>
@@ -30,14 +34,40 @@ template<BoardGame G>
 class SimGame {
   public:
     void worker_thread(int num_simulations, int sampling_moves, float epsilon, float alpha) try {
+      Evaluator<G> evaluator = std::bind_front(&SimGame::worker_evaluator, this);
+      std::vector<int8_t> players;
+      players.reserve(G::ACTIONS);
+
       while (true) {
         auto history = std::make_unique<History<G>>();
-        // TODO: Simulate one game, collecting all (Game, Policy, float) triples to `history`, where
-        // - the `Policy` is the policy computed by `mcts`;
-        // - the float value is the outcome of the whole game.
-        // When calling `mcts`, you would like to use `this->worker_evaluator` as the evaluator;
-        // however, `mcts` wants a function pointer as the `Evaluator<G>`, so you need to use
-        // `std::bind_front(&SimGame::worker_evaluator, this)` as the second argument of `mcts`.
+        players.clear();
+
+        G game;
+        int move_idx = 0;
+        while (!game.outcome()) {
+          Policy<G> policy{};
+          mcts<G>(game, evaluator, num_simulations, epsilon, alpha, policy);
+
+          int action;
+          if (move_idx < sampling_moves) {
+            std::discrete_distribution<int> dist(policy.begin(), policy.end());
+            action = dist(*board_game_generator);
+          } else {
+            action = static_cast<int>(
+                std::max_element(policy.begin(), policy.end()) - policy.begin());
+          }
+
+          players.push_back(game.to_play);
+          history->emplace_back(game, policy, 0.0f);
+
+          game.move(action);
+          ++move_idx;
+        }
+
+        for (std::size_t i = 0; i < history->size(); ++i) {
+          Outcome o = game.outcome(players[i]);
+          std::get<2>((*history)[i]) = static_cast<float>(o) - 2.0f;
+        }
 
         // Once the whole game is finished, we pass it to processor to return it.
         {
