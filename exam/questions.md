@@ -8,7 +8,7 @@
 - Define a Markov Decision Process, including the definition of a return. [5]
 
 - Describe how a partially observable Markov decision process extends a
-  Markov decision process and how the agent is altered. [5]
+  Markov decision process and how these extensions affect the agent. [5]
 
 - Define a value function, such that all expectations are over simple random
   variables (actions, states, rewards), not trajectories. [5]
@@ -72,7 +72,8 @@
 
 - Write down the semi-gradient $\epsilon$-greedy Sarsa algorithm. [10]
 
-- Prove that semi-gradient TD update is not an SGD update of any loss. [10]
+- Prove that, for general function approximation, the semi-gradient TD update
+  does not correspond to the SGD update of any loss. [10]
 
 - What are the three elements causing off-policy divergence with function
   approximation? Write down the Baird's counterexample. [10]
@@ -128,12 +129,12 @@
   What are the advantages of quantile regression compared to C51? [5]
 
 - Assume we can get samples with a distribution $P$. Write down the
-  loss to minimize if we want to estimate the mean of the distribution and
-  prove it. [5]
+  loss function defined over individual samples that we need to minimize
+  to estimate the mean of the distribution, and prove it. [5]
 
 - Assume we can get samples with a distribution $P$. Write down the
-  loss to minimize if we want to estimate the median of the distribution and
-  prove it. [5]
+  loss function defined over individual samples that we need to minimize to
+  estimate the median of the distribution, and prove it. [5]
 
 #### Questions@:, Lecture 6 Questions
 - Formulate the policy gradient theorem. [5]
@@ -391,3 +392,36 @@
 
 - Describe the training of both a critic and an actor in DreamerV2 (including
   the explicit losses). [10]
+
+#### Questions@:, Lecture 14 Questions
+- In Reinforcement learning from human feedback, define what models are trained
+  and write down the three parallel processes performed during training. [5]
+
+- In Reinforcement learning from human feedback, define a trajectory segment,
+  write down how we estimate the probability that one trajectory segment
+  is rated to be better than another trajectory segment according to the
+  Bradley-Terry model, and then define the loss we minimize to fit the estimated
+  reward in RLHF. [10]
+
+- When summarizing from human feedback, define the loss we minimize to fit the
+  reward model, and then describe how we train the human feedback policies
+  (make sure to describe all quantities of the loss in detail). What are the
+  roles of the used KL term? [10]
+
+- In InstructGPT, write down the difference in collecting the rating compared
+  to plain RLHF, define the loss used to train the reward model, and finally
+  describe the reward used to train the PPO and PPO-ptx models. [5]
+
+- What is the goal of Direct Preference Optimization (DPO)? Describe the input
+  data it requires and state the high-level objective it optimizes, showing how
+  a reward function $r(x,y)$ enters this objective before DPO bypasses it.
+  (You do not need to derive or write the final DPO loss function). [5]
+
+- In Direct Preference Optimization (DPO), write down the underlying
+  KL-constrained reward objective it optimizes, show its analytical optimum
+  $\pi^*$, express the latent reward function in terms of the optimum
+  and reference policy (“your language model is secretely a reward model” step),
+  and conclude by writing down the final DPO loss function. [10]
+
+- Provide the loss function for Group Relative Policy Optimization (GRPO) and
+  detail the core differences to the PPO algorithm. [10]
