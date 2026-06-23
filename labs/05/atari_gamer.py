@@ -254,9 +254,9 @@ def main(env: npfl139.EvaluationEnv, args: argparse.Namespace) -> None:
             epsilon = np.interp(steps, [0, args.epsilon_final_at], [args.epsilon, args.epsilon_final])
             
         # Stop and save if the moving average return is > 6
-        if len(observer.returns) == observer.returns.maxlen and np.mean(observer.returns) >= 20:
+        if len(observer.returns) == observer.returns.maxlen and np.mean(observer.returns) >= 16:
             print("Target score reached! Saving model and exiting.")
-            torch.save(network._model.state_dict(), "atari_gamer2.pt")
+            torch.save(network._model.state_dict(), "atari_gamer.pt")
             break
         
 
