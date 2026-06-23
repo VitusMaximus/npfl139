@@ -19,7 +19,7 @@ import regex as re
 
 parser = argparse.ArgumentParser()
 # These arguments will be set appropriately by ReCodEx, even if you change them.
-parser.add_argument("--recodex", default=True, action="store_true", help="Running in ReCodEx")
+parser.add_argument("--recodex", default=False, action="store_true", help="Running in ReCodEx")
 parser.add_argument("--render_each", default=0, type=int, help="Render some episodes.")
 parser.add_argument("--seed", default=42, type=int, help="Random seed.")
 parser.add_argument("--threads", default=0, type=int, help="Maximum number of threads to use.")
@@ -38,7 +38,7 @@ parser.add_argument("--batch_size", default=64, type=int, help="Batch size.")
 parser.add_argument("--gamma", default=0.99, type=float, help="Discounting factor.")
 parser.add_argument("--epsilon", default=1.0, type=float, help="Exploration factor.")
 parser.add_argument("--epsilon_final", default=0.01, type=float, help="Final exploration factor.")
-parser.add_argument("--epsilon_final_at", default=250_000, type=int, help="Training steps.")
+parser.add_argument("--epsilon_final_at", default=400_000, type=int, help="Training steps.")
 
 parser.add_argument("--target_update_freq", default=5_000, type=int, help="Target network update frequency.")
 parser.add_argument("--replay_buffer_size", default=100_000, type=int, help="Replay buffer size.")
