@@ -23,7 +23,7 @@ if command -v nvidia-smi >/dev/null 2>&1; then
     nvidia-smi
 fi
 
-python -u labs/06/paac.py \
+python -u labs/05/atari_gamer.py \
     --threads "${SLURM_CPUS_PER_TASK:-8}" \
     --envs 16 \
     "$@"
