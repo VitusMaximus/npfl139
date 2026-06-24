@@ -14,7 +14,7 @@ npfl139.require_version("2526.5")
 import torch
 import copy
 import numpy as np
-import regex as re
+import re
 
 
 parser = argparse.ArgumentParser()

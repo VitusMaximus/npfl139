@@ -25,5 +25,5 @@ fi
 
 python -u labs/05/atari_gamer.py \
     --threads "${SLURM_CPUS_PER_TASK:-8}" \
-    --envs 16 \
+    --num_envs 16 \
     "$@"

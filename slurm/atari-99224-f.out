@@ -1,0 +1,47 @@
+Tue Jun 23 18:31:39 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.54.14              Driver Version: 550.54.14      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A16                     Off |   00000000:C5:00.0 Off |                    0 |
+|  0%   42C    P0             19W /   62W |       0MiB /  15356MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+Evaluation returns: -2714.517167741985
+Evaluation returns: -1587.9923698920882
+Evaluation returns: -1262.8667618519303
+Evaluation returns: -1043.6124568528994
+Evaluation returns: -884.9945426376838
+Evaluation returns: -764.4511166488761
+Evaluation returns: -683.4123669526476
+Evaluation returns: -615.9194860230587
+Evaluation returns: -561.3406370878088
+Evaluation returns: -517.4615884659142
+Evaluation returns: -256.9461402947705
+Evaluation returns: -221.6394853580169
+Evaluation returns: -173.5984638150485
+Evaluation returns: -147.09505310129344
+Evaluation returns: -135.08431555439012
+Evaluation returns: -132.61980799564324
+Evaluation returns: -126.67191688421269
+Evaluation returns: -126.16427562098878
+Evaluation returns: -129.04114850290242
+Evaluation returns: -133.20343591544034
+Evaluation returns: -137.57054991068583
+Evaluation returns: -143.42822055199935
+Evaluation returns: -143.75315127958086
+Evaluation returns: -145.89767226289447
+Evaluation returns: -149.7144246653276
+Evaluation returns: -153.34528303131066
+Evaluation returns: -158.49655032297838

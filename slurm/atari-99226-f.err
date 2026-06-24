@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/lnet/aic/personal/babkavi/npfl139/labs/05/atari_gamer.py", line 17, in <module>
+    import regex as re
+ModuleNotFoundError: No module named 'regex'
